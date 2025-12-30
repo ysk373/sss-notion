@@ -2,6 +2,7 @@ const { exec } = require('child_process');
 const { Client } = require('@notionhq/client');
 const cliProgress = require('cli-progress');
 const { PromisePool } = require('@supercharge/promise-pool');
+require('dotenv').config();
 
 const notion = new Client({ auth: process.env.NOTION_API_SECRET });
 
