@@ -1,0 +1,59 @@
+/**
+ * SSS Blog Theme - カラーパレットとフォント設定
+ * sssstudyのModern Blueパレットをベースに設計
+ */
+
+:root {
+    /* ===== SSS Primary Colors ===== */
+    --sss-primary: #007AFF;
+    /* Modern Blue - メインアクセント */
+    --sss-primary-hover: #0056CC;
+    /* ホバー時の濃いブルー */
+    --sss-primary-light: #EFF6FF;
+    /* 薄いブルー（背景用） */
+
+    /* ===== Background & Foreground ===== */
+    --sss-bg: #FFFFFF;
+    /* メイン背景 */
+    --sss-bg-secondary: #F9FAFB;
+    /* セカンダリ背景（サイドバー等） */
+    --sss-fg: #1F2937;
+    /* メインテキスト */
+    --sss-fg-muted: #6B7280;
+    /* 薄いテキスト */
+
+    /* ===== Border & Dividers ===== */
+    --sss-border: #E5E7EB;
+    /* ボーダー */
+    --sss-border-light: #F3F4F6;
+    /* 薄いボーダー */
+
+    /* ===== Card Styles ===== */
+    --sss-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --sss-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --sss-card-radius: 8px;
+
+    /* ===== Override existing variables ===== */
+    --bg: var(--sss-bg);
+    --fg: var(--sss-fg);
+    --accents-1: var(--sss-primary);
+    --accents-2: var(--sss-fg-muted);
+    --accents-3: var(--sss-fg-muted);
+
+    /* ===== Typography ===== */
+    --font-sans: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Note: Google Fonts loaded via link tag in Layout.astro */
+
+/* Apply font globally */
+html,
+body {
+    font-family: var(--font-sans);
+}
+
+/* Link hover color */
+a:hover {
+    color: var(--sss-primary-hover);
+}

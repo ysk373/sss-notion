@@ -1,22 +1,77 @@
 .main header {
   padding: 0 0 20px;
 }
+
+/* 記事一覧コンテナ - 2列グリッドレイアウト */
+.main {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* フッター（ページネーション）は全幅 */
 .main footer {
-  border-top: 1px dashed #888;
+  grid-column: 1 / -1;
+  border-top: 1px dashed var(--sss-border, #888);
   margin: 0 auto;
   padding: 40px 0 0;
 }
+
+/* モバイル: 2列維持、gapを調整 */
 @media (max-width: 640px) {
+  .main {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
   .main footer {
     margin: 0 auto 40px;
   }
+
+  .post {
+    padding: 1rem;
+  }
 }
 
+/* 記事カード - ホバーエフェクト付き（一覧ページ用） */
 .post {
-  margin: 0 auto 40px;
+  margin: 0;
+  padding: 1.5rem;
+  background: var(--sss-bg, #fff);
+  border-radius: var(--sss-card-radius, 8px);
+  box-shadow: var(--sss-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.1));
+  border: 1px solid var(--sss-border-light, #f3f4f6);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
 }
+
+.post:hover {
+  box-shadow: var(--sss-card-shadow-hover, 0 4px 12px rgba(0, 0, 0, 0.15));
+  transform: translateY(-2px);
+}
+
 .post footer {
   margin-top: 0.5rem;
   padding: 0;
   border: 0;
+}
+
+/* ====================================
+   個別記事ページ用スタイル
+   ==================================== */
+.singlePost {
+  display: block;
+  width: 100%;
+}
+
+.postContent {
+  margin: 0;
+  padding: 0;
+}
+
+.postContent footer {
+  border-top: 1px dashed var(--sss-border, #888);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
 }

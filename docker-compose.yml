@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  blog:
+    container_name: sss-notion-container # コンテナ名を固定
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4321:4321" # Astro dev サーバー
+    volumes:
+      - ./:/app # ホストのファイルをコンテナにマウント（ホットリロード対応）
+      - /app/node_modules/ # node_modulesはマウントしない
+      - /app/.git/ # .gitディレクトリもマウントしない
+    env_file:
+      - .env # 環境変数ファイルを読み込み
+    environment:
+      - HOST=0.0.0.0
+      - PORT=4321
+    restart: unless-stopped # コンテナを自動的に再起動
+    command: dev -- --host # 開発モードで起動（--hostでネットワーク公開）

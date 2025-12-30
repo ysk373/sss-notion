@@ -1,0 +1,91 @@
+---
+/**
+ * AuthorProfile.astro
+ * サイドバーに表示する著者プロフィールブロック
+ */
+
+interface Props {
+    name?: string
+    description?: string
+    avatarUrl?: string
+}
+
+const {
+    name = 'Yusuke',
+    description = '組み込みシステムエンジニア。DSP開発、自動車業界での経験を活かし、技術ブログを運営中。投資にも興味あり。',
+    avatarUrl = '',
+} = Astro.props
+---
+
+<div class="author-profile">
+    <div class="author-avatar">
+        {
+            avatarUrl ? (
+                <img src={avatarUrl} alt={`${name}のアバター`} />
+            ) : (
+                <div class="avatar-placeholder">
+                    <span>{name.charAt(0)}</span>
+                </div>
+            )
+        }
+    </div>
+    <h3 class="author-name">{name}</h3>
+    <p class="author-description">{description}</p>
+</div>
+
+<style>
+    .author-profile {
+        background: var(--sss-bg, #fff);
+        border-radius: var(--sss-card-radius, 8px);
+        box-shadow: var(--sss-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.1));
+        border: 1px solid var(--sss-border-light, #f3f4f6);
+        padding: 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .author-avatar {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .author-avatar img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--sss-primary, #2563eb);
+    }
+
+    .avatar-placeholder {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            var(--sss-primary, #2563eb),
+            var(--sss-primary-dark, #1d4ed8)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .author-name {
+        margin: 0 0 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--sss-text, #333);
+    }
+
+    .author-description {
+        margin: 0;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: var(--sss-text-light, #666);
+    }
+</style>
