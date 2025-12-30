@@ -3,6 +3,7 @@
 ## 1. プロジェクト概要
 **目的**: Notionをコンテンツ管理システムとして使用した個人技術ブログ (SSS blog) の運営  
 **ベース**: [otoyo/astro-notion-blog](https://github.com/otoyo/astro-notion-blog) v0.10.0
+**リポジトリ**: [ysk373/sss-notion](https://github.com/ysk373/sss-notion)
 
 **主要機能**:
 - Notionで記事を執筆・管理
