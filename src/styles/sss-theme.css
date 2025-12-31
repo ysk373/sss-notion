@@ -13,10 +13,12 @@
     /* 薄いブルー（背景用） */
 
     /* ===== Background & Foreground ===== */
-    --sss-bg: #FFFFFF;
-    /* メイン背景 */
-    --sss-bg-secondary: #F9FAFB;
+    --sss-bg: #f5f7fa;
+    /* メイン背景（薄いグレー） */
+    --sss-bg-secondary: #eef1f5;
     /* セカンダリ背景（サイドバー等） */
+    --sss-card-bg: #ffffff;
+    /* カード背景（白） */
     --sss-fg: #1F2937;
     /* メインテキスト */
     --sss-fg-muted: #6B7280;
@@ -29,9 +31,9 @@
     /* 薄いボーダー */
 
     /* ===== Card Styles ===== */
-    --sss-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --sss-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
-    --sss-card-radius: 8px;
+    --sss-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --sss-card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+    --sss-card-radius: 12px;
 
     /* ===== Override existing variables ===== */
     --bg: var(--sss-bg);

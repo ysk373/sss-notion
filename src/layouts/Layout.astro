@@ -60,6 +60,21 @@ if (database.Icon && database.Icon.Type === 'file') {
     <title>{siteTitle}</title>
     <meta name="description" content={siteDescription} />
     <link rel="canonical" href={siteURL} />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href={getStaticFilePath('/favicon.ico')}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href={getStaticFilePath('/favicon.png')}
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={getStaticFilePath('/perfectly-symmetric-s-icon.svg')}
+    />
     <meta property="og:url" content={siteURL} />
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={siteDescription} />
