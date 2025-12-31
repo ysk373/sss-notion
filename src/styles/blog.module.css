@@ -41,7 +41,9 @@
   border-radius: var(--sss-card-radius, 8px);
   box-shadow: var(--sss-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.1));
   border: 1px solid var(--sss-border-light, #f3f4f6);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
   display: flex;
   flex-direction: column;
 }

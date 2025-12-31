@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4321:4321" # Astro dev サーバー
+      - '4321:4321' # Astro dev サーバー
     volumes:
       - ./:/app # ホストのファイルをコンテナにマウント（ホットリロード対応）
       - /app/node_modules/ # node_modulesはマウントしない
