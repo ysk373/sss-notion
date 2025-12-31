@@ -1,5 +1,6 @@
 .main header {
   padding: 0 0 20px;
+  grid-column: 1 / -1;
 }
 
 /* 記事一覧コンテナ - 2列グリッドレイアウト */
