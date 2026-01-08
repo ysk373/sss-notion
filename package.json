@@ -21,6 +21,7 @@
   "dependencies": {
     "@astrojs/react": "^4.1.2",
     "@astrojs/rss": "^4.0.11",
+    "@astrojs/sitemap": "^3.6.0",
     "@aws-sdk/client-s3": "^3.958.0",
     "@iconify-json/octicon": "^1.2.2",
     "@notionhq/client": "^2.2.15",

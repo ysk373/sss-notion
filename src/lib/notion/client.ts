@@ -136,7 +136,11 @@ export async function getAllPosts(): Promise<Post[]> {
 
 export async function getPosts(pageSize = 10): Promise<Post[]> {
   const allPosts = await getAllPosts()
-  return allPosts.slice(0, pageSize)
+  // Infoタグを持つ固定ページを除外
+  const filteredPosts = allPosts.filter(
+    (post) => !post.Tags.some((tag) => tag.name === 'Info')
+  )
+  return filteredPosts.slice(0, pageSize)
 }
 
 export async function getRankedPosts(pageSize = 10): Promise<Post[]> {
@@ -183,11 +187,15 @@ export async function getPostsByPage(page: number): Promise<Post[]> {
   }
 
   const allPosts = await getAllPosts()
+  // Infoタグを持つ固定ページを除外
+  const filteredPosts = allPosts.filter(
+    (post) => !post.Tags.some((tag) => tag.name === 'Info')
+  )
 
   const startIndex = (page - 1) * NUMBER_OF_POSTS_PER_PAGE
   const endIndex = startIndex + NUMBER_OF_POSTS_PER_PAGE
 
-  return allPosts.slice(startIndex, endIndex)
+  return filteredPosts.slice(startIndex, endIndex)
 }
 
 // page starts from 1 not 0
@@ -212,9 +220,13 @@ export async function getPostsByTagAndPage(
 
 export async function getNumberOfPages(): Promise<number> {
   const allPosts = await getAllPosts()
+  // Infoタグを持つ固定ページを除外
+  const filteredPosts = allPosts.filter(
+    (post) => !post.Tags.some((tag) => tag.name === 'Info')
+  )
   return (
-    Math.floor(allPosts.length / NUMBER_OF_POSTS_PER_PAGE) +
-    (allPosts.length % NUMBER_OF_POSTS_PER_PAGE > 0 ? 1 : 0)
+    Math.floor(filteredPosts.length / NUMBER_OF_POSTS_PER_PAGE) +
+    (filteredPosts.length % NUMBER_OF_POSTS_PER_PAGE > 0 ? 1 : 0)
   )
 }
 
@@ -366,7 +378,8 @@ export async function getAllTags(): Promise<SelectProperty[]> {
   return allPosts
     .flatMap((post) => post.Tags)
     .reduce((acc, tag) => {
-      if (!tagNames.includes(tag.name)) {
+      // Infoタグはサイドバーに表示しない
+      if (!tagNames.includes(tag.name) && tag.name !== 'Info') {
         acc.push(tag)
         tagNames.push(tag.name)
       }

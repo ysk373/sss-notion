@@ -146,7 +146,20 @@ if (database.Icon && database.Icon.Type === 'file') {
             <slot name="main" />
 
             <footer>
-              <div>
+              <nav class="footer-links">
+                <a href={getNavLink('/posts/about')}>運営者情報</a>
+                <span class="separator">|</span>
+                <a href={getNavLink('/posts/contact')}>お問い合わせ</a>
+                <span class="separator">|</span>
+                <a href={getNavLink('/posts/privacy-policy')}
+                  >プライバシーポリシー</a
+                >
+                <span class="separator">|</span>
+                <a href={getNavLink('/posts/disclaimer')}>免責事項</a>
+              </nav>
+              <div class="copyright">
+                <span>&copy; 2026 30代エンジニアの備忘録</span>
+                <span class="separator">|</span>
                 <span>Powered by&nbsp;</span>
                 <a href="https://github.com/otoyo/astro-notion-blog"
                   >astro-notion-blog</a
@@ -271,21 +284,49 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
 
   main footer {
-    margin: 30px 0 10px;
+    margin: 40px 0 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--sss-border, #e0e0e0);
     text-align: center;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
   @media (max-width: 640px) {
     main footer {
-      margin: 0 auto 30px;
+      margin: 30px auto 20px;
+      padding: 15px 0;
     }
   }
-  main footer span {
-    color: #777;
+  main footer .footer-links {
+    margin-bottom: 12px;
   }
-  main footer a {
+  main footer .footer-links a {
+    color: #555;
+    text-decoration: none;
+  }
+  main footer .footer-links a:hover {
+    text-decoration: underline;
+  }
+  main footer .separator {
+    margin: 0 8px;
+    color: #ccc;
+  }
+  main footer .copyright {
+    color: #888;
+  }
+  main footer .copyright a {
     color: inherit;
     text-decoration: underline;
+  }
+  @media (max-width: 640px) {
+    main footer .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px 0;
+    }
+    main footer .separator {
+      margin: 0 6px;
+    }
   }
 </style>
 
