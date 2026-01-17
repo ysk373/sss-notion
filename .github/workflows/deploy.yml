@@ -25,6 +25,8 @@ jobs:
       DATABASE_ID: ${{ secrets.DATABASE_ID }}
       # Custom domain setting for Astro
       CUSTOM_DOMAIN: sssstudy.com
+      # Google Analytics 4
+      PUBLIC_GA_TRACKING_ID: G-PGY8X62NHJ
     steps:
       - name: Checkout
         uses: actions/checkout@v4
