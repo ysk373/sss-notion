@@ -1,10 +1,9 @@
 ---
-import { NUMBER_OF_POSTS_PER_PAGE } from '../server-constants.ts'
+import { MAIN_CATEGORIES } from '../server-constants.ts'
 import {
-  getPosts,
   getRankedPosts,
   getAllTags,
-  getNumberOfPages,
+  getPostsByTag,
 } from '../lib/notion/client.ts'
 import Layout from '../layouts/Layout.astro'
 import NoContents from '../components/NoContents.astro'
@@ -14,42 +13,62 @@ import PostTitle from '../components/PostTitle.astro'
 import PostFeaturedImage from '../components/PostFeaturedImage.astro'
 import PostExcerpt from '../components/PostExcerpt.astro'
 import ReadMoreLink from '../components/ReadMoreLink.astro'
-import Pagination from '../components/Pagination.astro'
 import BlogPostsLink from '../components/BlogPostsLink.astro'
 import BlogTagsLink from '../components/BlogTagsLink.astro'
 import AuthorProfile from '../components/AuthorProfile.astro'
 import styles from '../styles/blog.module.css'
 
-const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
-  getPosts(NUMBER_OF_POSTS_PER_PAGE),
-  getRankedPosts(),
-  getAllTags(),
-  getNumberOfPages(),
-])
+const [rankedPosts, tags] = await Promise.all([getRankedPosts(), getAllTags()])
+
+const categoryPosts = await Promise.all(
+  MAIN_CATEGORIES.map(async (categoryName) => {
+    const tag = tags.find((t) => t.name === categoryName)
+    const posts = await getPostsByTag(categoryName, 4)
+    return { tag: tag || { name: categoryName, color: 'default' }, posts }
+  })
+)
 ---
 
-<Layout>
-  <div slot="main" class={styles.main}>
+<Layout
+  title="トップページ"
+  description="最新記事のカテゴリ別まとめ"
+  path="/"
+  ogImage=""
+>
+  <div slot="main">
     {
-      posts.length === 0 ? (
-        <NoContents contents={posts} />
-      ) : (
-        posts.map((post) => (
-          <div class={styles.post} key={post.Slug}>
-            <PostDate post={post} />
-            <PostTags post={post} />
-            <PostTitle post={post} />
-            <PostFeaturedImage post={post} />
-            <PostExcerpt post={post} />
-            <ReadMoreLink post={post} />
-          </div>
-        ))
+      categoryPosts.map(({ tag, posts }) => {
+        if (posts.length === 0) return null
+
+        return (
+          <section class={styles.categorySection}>
+            <header class={styles.categoryHeader}>
+              <h2 class={styles.categoryTitle}>{tag.name}</h2>
+              <a href={`/posts/tag/${tag.name}`} class={styles.categoryMore}>
+                もっと見る
+              </a>
+            </header>
+            <div class={styles.categoryGrid}>
+              {posts.map((post) => (
+                <div class={styles.post}>
+                  <PostDate post={post} enableLink={false} />
+                  <PostTags post={post} enableLink={false} />
+                  <PostTitle post={post} enableLink={true} />
+                  <PostFeaturedImage post={post} />
+                  <PostExcerpt post={post} />
+                  <ReadMoreLink post={post} />
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      })
+    }
+    {
+      categoryPosts.every(({ posts }) => posts.length === 0) && (
+        <NoContents contents={[]} />
       )
     }
-
-    <footer>
-      <Pagination currentPage={1} numberOfPages={numberOfPages} />
-    </footer>
   </div>
 
   <div slot="aside" class={styles.aside}>

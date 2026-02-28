@@ -2,6 +2,7 @@
 import type { SelectProperty } from '../lib/interfaces.ts'
 import { getTagLink } from '../lib/blog-helpers.ts'
 import NoContents from './NoContents.astro'
+import { getAllPosts } from '../lib/notion/client.ts'
 import '../styles/notion-color.css'
 
 export interface Props {
@@ -10,6 +11,69 @@ export interface Props {
 }
 
 const { heading, tags } = Astro.props
+
+// タグの階層構造を構築するため、全記事データを取得してタグの併用状況を調べる
+const allPosts = await getAllPosts()
+
+interface TagHierarchy {
+  baseTag: SelectProperty
+  children: Map<string, SelectProperty>
+}
+
+// Notionの仕様に合わせて、親カテゴリを「ピンク色 (pink)」のものと定義する
+const PARENT_COLOR = 'pink'
+
+const hierarchy: Record<string, TagHierarchy> = {}
+
+// 1. まず親カテゴリ（ピンク色）を登録する
+tags.forEach((tag) => {
+  if (tag.color === PARENT_COLOR) {
+    hierarchy[tag.name] = {
+      baseTag: tag,
+      children: new Map(),
+    }
+  }
+})
+
+// 2. 記事についているタグから親子関係を導き出す
+// 同一記事内に親タグ(pink)と子タグ(pink以外)が共存していれば紐付ける
+allPosts.forEach((post) => {
+  const parentTags = post.Tags.filter((t) => t.color === PARENT_COLOR)
+  const childTags = post.Tags.filter(
+    (t) => t.color !== PARENT_COLOR && t.name !== 'Info'
+  )
+
+  parentTags.forEach((parent) => {
+    if (hierarchy[parent.name]) {
+      childTags.forEach((child) => {
+        hierarchy[parent.name].children.set(child.name, child)
+      })
+    }
+  })
+})
+
+const assignedChildNames = new Set<string>()
+
+// 3. マップを配列に変換し、子カテゴリを名前順にソートする
+const groupedTags = Object.values(hierarchy).map((group) => {
+  const children = Array.from(group.children.values()).sort((a, b) =>
+    a.name.localeCompare(b.name)
+  )
+  children.forEach((c) => assignedChildNames.add(c.name))
+  return { baseTag: group.baseTag, children }
+})
+
+// 4. どの親カテゴリにも属さないタグ（ピンク色でもなく、親と一緒に使われたこともないタグ）を抽出
+const standaloneTags = tags.filter(
+  (tag) => tag.color !== PARENT_COLOR && !assignedChildNames.has(tag.name)
+)
+
+standaloneTags.forEach((tag) => {
+  groupedTags.push({ baseTag: tag, children: [] })
+})
+
+// 5. 親カテゴリ名で全体をソート
+groupedTags.sort((a, b) => a.baseTag.name.localeCompare(b.baseTag.name))
 ---
 
 <div class="blog-tags-link">
@@ -18,12 +82,31 @@ const { heading, tags } = Astro.props
     tags.length === 0 ? (
       <NoContents contents={tags} />
     ) : (
-      <ul>
-        {tags.map((tag: SelectProperty) => (
-          <li>
-            <a href={getTagLink(tag.name)} class={`tag ${tag.color}`}>
-              {tag.name}
+      <ul class="tag-tree">
+        {groupedTags.map((group) => (
+          <li class="tag-group">
+            <a
+              href={getTagLink(group.baseTag.name)}
+              class={`tag ${group.baseTag.color} parent-tag`}
+            >
+              {group.baseTag.name}
             </a>
+            {group.children.length > 0 && (
+              <ul class="tag-children">
+                {group.children.map((child: SelectProperty) => {
+                  return (
+                    <li>
+                      <a
+                        href={getTagLink(child.name)}
+                        class={`tag ${child.color} child-tag`}
+                      >
+                        {child.name}
+                      </a>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
           </li>
         ))}
       </ul>
@@ -43,22 +126,51 @@ const { heading, tags } = Astro.props
   .blog-tags-link ul {
     list-style-type: none;
     padding: 0;
-    margin-top: 0.3rem;
+    margin-top: 0.5rem;
     margin-block-end: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
   }
   .blog-tags-link ul li {
-    position: relative;
-    padding: 0.4rem;
-    line-height: 1.2rem;
     font-size: 0.9rem;
-    gap: 6px;
+    line-height: 1.2rem;
   }
-  .blog-tags-link ul li a {
+
+  /* タグの基本スタイル */
+  .tag {
+    display: inline-block;
     min-width: 0;
     border-radius: 3px;
-    padding: 2px 6px;
+    padding: 4px 8px;
     line-height: 1.2;
     color: rgb(50, 48, 44);
     background: rgba(227, 226, 224, 0.5);
+    text-decoration: none;
+  }
+
+  .tag-group {
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  /* 子要素リストのスタイル */
+  .tag-children {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-left: 1rem;
+    margin-top: 0.4rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  .tag-children li {
+    display: inline-block;
+  }
+
+  .tag-children a {
+    display: inline-block;
+    font-size: 0.85rem;
   }
 </style>
