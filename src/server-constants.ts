@@ -17,8 +17,4 @@ export const REQUEST_TIMEOUT_MS = parseInt(
 export const ENABLE_LIGHTBOX = import.meta.env.ENABLE_LIGHTBOX
 
 // トップページに表示するメインカテゴリ（表示順）
-export const MAIN_CATEGORIES = [
-  '投資',
-  '技術',
-  '小説'
-]
+export const MAIN_CATEGORIES = ['投資', '技術', '小説']
