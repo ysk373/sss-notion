@@ -85,27 +85,35 @@ groupedTags.sort((a, b) => a.baseTag.name.localeCompare(b.baseTag.name))
       <ul class="tag-tree">
         {groupedTags.map((group) => (
           <li class="tag-group">
-            <a
-              href={getTagLink(group.baseTag.name)}
-              class={`tag ${group.baseTag.color} parent-tag`}
-            >
-              {group.baseTag.name}
-            </a>
-            {group.children.length > 0 && (
-              <ul class="tag-children">
-                {group.children.map((child: SelectProperty) => {
-                  return (
-                    <li>
-                      <a
-                        href={getTagLink(child.name)}
-                        class={`tag ${child.color} child-tag`}
-                      >
-                        {child.name}
-                      </a>
-                    </li>
-                  )
-                })}
-              </ul>
+            {group.children.length > 0 ? (
+              <details class="tag-details">
+                <summary class={`tag-summary tag ${group.baseTag.color}`}>
+                  <a href={getTagLink(group.baseTag.name)} class="summary-link">
+                    {group.baseTag.name}
+                  </a>
+                </summary>
+                <ul class="tag-children">
+                  {group.children.map((child: SelectProperty) => {
+                    return (
+                      <li>
+                        <a
+                          href={getTagLink(child.name)}
+                          class={`tag ${child.color}`}
+                        >
+                          {child.name}
+                        </a>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </details>
+            ) : (
+              <a
+                href={getTagLink(group.baseTag.name)}
+                class={`tag ${group.baseTag.color} standalone-tag`}
+              >
+                {group.baseTag.name}
+              </a>
             )}
           </li>
         ))}
@@ -151,7 +159,61 @@ groupedTags.sort((a, b) => a.baseTag.name.localeCompare(b.baseTag.name))
 
   .tag-group {
     display: block;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .standalone-tag {
+    display: inline-block;
+    margin-bottom: 2px;
+  }
+
+  /* アコーディオン (details/summary) スタイル */
+  .tag-details {
+    display: block;
+    width: 100%;
+  }
+
+  /* summaryタグを装飾してタグのように見せる */
+  .tag-summary {
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    list-style: none; /* デフォルトの矢印を消す準備 */
+    position: relative;
+    padding-left: 20px; /* 矢印アイコン用スペース */
+    margin-bottom: 4px;
+    transition: background-color 0.2s ease;
+  }
+
+  /* summaryに付いているaタグはあくまで見出しのリンクとして装飾を消す */
+  .summary-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .summary-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ウェブキット系ブラウザ用のアコーディオン矢印消去 */
+  .tag-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* カスタムの開閉矢印を擬似要素で追加 */
+  .tag-summary::before {
+    content: '▶';
+    position: absolute;
+    left: 6px;
+    font-size: 0.6rem;
+    color: inherit;
+    transition: transform 0.2s ease;
+  }
+
+  /* detailsが開いている時は矢印を下に向ける */
+  .tag-details[open] .tag-summary::before {
+    transform: rotate(90deg);
   }
 
   /* 子要素リストのスタイル */
@@ -160,9 +222,10 @@ groupedTags.sort((a, b) => a.baseTag.name.localeCompare(b.baseTag.name))
     flex-direction: row;
     flex-wrap: wrap;
     gap: 6px;
-    padding-left: 1rem;
-    margin-top: 0.4rem !important;
-    margin-bottom: 0 !important;
+    padding-left: 12px;
+    margin-top: 0.3rem !important;
+    margin-bottom: 0.2rem !important;
+    border-left: 1px dashed var(--sss-border, #ccc);
   }
 
   .tag-children li {
