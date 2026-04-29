@@ -49,6 +49,7 @@ node $GENERATE_IMAGE_SCRIPT "modern tech blog thumbnail, clean design, 16:9 aspe
 ### サムネイル画像向けプロンプト
 
 ブログ記事のサムネイルには以下を意識:
+
 - シンプルで目を引くデザイン
 - テキストが重ねやすい余白のある構図
 - 16:9のアスペクト比を明示
@@ -67,6 +68,7 @@ AIが余分な線・ボックスを生成する問題を防ぐため、以下を
 **パターン別テンプレート**:
 
 縦積みアーキテクチャ:
+
 ```
 "Vertical layout top-to-bottom. Draw EXACTLY [N] boxes:
 (1) Top box labeled '...'
@@ -77,6 +79,7 @@ Draw ONLY these elements."
 ```
 
 左右クライアント-サーバー（通信パターン）:
+
 ```
 "LEFT box labeled '[Client]'. RIGHT box labeled '[Server]'.
 Draw EXACTLY [N] arrows from top to bottom:
@@ -86,6 +89,7 @@ Draw ONLY these 2 boxes and [N] arrows. No extra lines."
 ```
 
 時系列フロー（ステップ図）:
+
 ```
 "[N] sequential steps arranged LEFT-TO-RIGHT with horizontal arrows between consecutive steps.
 Step 1 (leftmost): Rectangle labeled '[タイトル]' with notes: '- 説明'

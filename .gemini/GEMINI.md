@@ -184,6 +184,7 @@ npm run r2:upload -- ./image.png thumbnails/my-article.png
 ### 記事本文内画像のガイドライン
 
 #### スタイル
+
 - **手書き風（ホワイトボードスケッチ）スタイルを採用する**
   - 鉛筆・ペン書き風のラフなスケッチスタイル
   - 白背景に黒インクのシンプルな図解
@@ -201,18 +202,21 @@ AIが余分な線・ボックスを生成する問題を防ぐため、以下を
 5. **テキスト誤字防止** — `All text must be spelled correctly in English and Japanese. No typos.`
 
 **レイアウト指定例**:
+
 - 縦積み: `Vertical layout top-to-bottom`
 - 横並び: `Horizontal left-to-right layout`
 - 階層: `Hierarchical: X at top, Y and Z at middle level, W at bottom`
 - 時系列フロー: `[N] sequential steps arranged LEFT-TO-RIGHT with arrows between each step`
 
 #### 挿入位置
+
 - **記事の途中、説明の補助として挿入する**（冒頭や末尾にまとめて置かない）
 - 図解する内容の直前・直後に配置する（説明→画像の順が自然）
 - 1記事あたり2枚程度を目安に、記事内で分散して配置する
 - 例: 概念説明の直後、コードブロックの前、手順の要約として
 
 #### Notionページへの追加手順
+
 1. `node C:/dev/git/scripts/generate-image.js "プロンプト"` で手書き風画像を生成
 2. `npm run r2:upload -- <生成ファイルパス> articles/{スラッグ}/image-name.png` でR2にアップロード
 3. Notion MCPで `update_content` を使い、対象セクションの直後に挿入:

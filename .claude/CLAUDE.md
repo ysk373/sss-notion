@@ -129,6 +129,7 @@ npm run r2:upload -- ./image.png thumbnails/my-article.png
 ### 記事本文内画像のガイドライン
 
 #### スタイル
+
 - **手書き風（ホワイトボードスケッチ）スタイルを採用する**
   - 鉛筆・ペン書き風のラフなスケッチスタイル
   - 白背景に黒インクのシンプルな図解
@@ -148,12 +149,14 @@ AIが余分な線・ボックスを生成する問題を防ぐため、以下を
 パターン別テンプレートは `.claude/skills/nano-banana-pro/SKILL.md` を参照。
 
 #### 挿入位置
+
 - **記事の途中、説明の補助として挿入する**（冒頭や末尾にまとめて置かない）
 - 図解する内容の直前・直後に配置する（説明→画像の順が自然）
 - 1記事あたり2枚程度を目安に、記事内で分散して配置する
 - 例: 概念説明の直後、コードブロックの前、手順の要約として
 
 #### Notionページへの追加手順
+
 1. `node C:/dev/git/scripts/generate-image.js "プロンプト"` で手書き風画像を生成
 2. `npm run r2:upload -- <生成ファイルパス> articles/{スラッグ}/image-name.png` でR2にアップロード
 3. `notion-update-page` の `update_content` コマンドで対象セクションの直後に挿入:
@@ -305,12 +308,12 @@ SSS Blog: 2d82403f-bc5c-819f-a7f6-f1caee97d49f
 各スキルは `context: fork` で独立したコンテキストで実行されます。
 ユーザーの指示に応じて自動的に起動、またはスキル名で手動呼び出しも可能です。
 
-| スキル               | 説明                                                       |
-| -------------------- | ---------------------------------------------------------- |
-| `create-blog-post`   | MCP経由で新規ブログ記事を作成                              |
-| `create-story`       | MCP経由で短編小説を作成（storiesタグ付き）                 |
-| `add-thumbnail`      | サムネイル画像を設定（generate-image.js生成 + R2アップロード） |
-| `nano-banana-pro`    | 画像生成（generate-image.js / Gemini API）                   |
+| スキル             | 説明                                                           |
+| ------------------ | -------------------------------------------------------------- |
+| `create-blog-post` | MCP経由で新規ブログ記事を作成                                  |
+| `create-story`     | MCP経由で短編小説を作成（storiesタグ付き）                     |
+| `add-thumbnail`    | サムネイル画像を設定（generate-image.js生成 + R2アップロード） |
+| `nano-banana-pro`  | 画像生成（generate-image.js / Gemini API）                     |
 
 ### 主要MCPツール
 

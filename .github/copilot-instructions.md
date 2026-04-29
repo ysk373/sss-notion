@@ -135,6 +135,7 @@ sss-blog-images/
 ### 記事本文内画像のガイドライン
 
 #### スタイル
+
 - **手書き風（ホワイトボードスケッチ）スタイルを採用する**
   - 鉛筆・ペン書き風のラフなスケッチスタイル
   - 白背景に黒インクのシンプルな図解
@@ -142,12 +143,14 @@ sss-blog-images/
 - 生成プロンプトには以下を含める: `hand-drawn whiteboard sketch`, `rough pencil sketch style`, `white background`, `educational illustration`
 
 #### 挿入位置
+
 - **記事の途中、説明の補助として挿入する**（冒頭や末尾にまとめて置かない）
 - 図解する内容の直前・直後に配置する（説明→画像の順が自然）
 - 1記事あたり2枚程度を目安に、記事内で分散して配置する
 - 例: 概念説明の直後、コードブロックの前、手順の要約として
 
 #### Notionページへの追加手順
+
 1. `node C:/dev/git/scripts/generate-image.js "プロンプト"` で手書き風画像を生成
 2. `npm run r2:upload -- <生成ファイルパス> articles/{スラッグ}/image-name.png` でR2にアップロード
 3. Notion MCPで `update_content` を使い、対象セクションの直後に挿入:
@@ -244,11 +247,11 @@ https://images.sssstudy.com/articles/my-article/image.png?v=2
 
 ### トラブルシューティング
 
-| 問題 | 対処 |
-|---|---|
+| 問題                         | 対処                                               |
+| ---------------------------- | -------------------------------------------------- |
 | 変更がブラウザに反映されない | `docker-compose down && docker-compose up --build` |
-| 新しい記事が表示されない | Notionで`Published`チェックを確認 → 再デプロイ |
-| 開発サーバーが遅い | Notion APIリアルタイムアクセスによる正常動作 |
+| 新しい記事が表示されない     | Notionで`Published`チェックを確認 → 再デプロイ     |
+| 開発サーバーが遅い           | Notion APIリアルタイムアクセスによる正常動作       |
 
 ---
 
@@ -269,13 +272,13 @@ git push
 
 ### 利用可能なMCPツール
 
-| ツール | 説明 |
-|---|---|
-| `API-post-page` | 新規ページを作成 |
-| `API-patch-page` | ページプロパティを更新 |
+| ツール                     | 説明                       |
+| -------------------------- | -------------------------- |
+| `API-post-page`            | 新規ページを作成           |
+| `API-patch-page`           | ページプロパティを更新     |
 | `API-patch-block-children` | ページに本文ブロックを追加 |
-| `API-post-search` | ページ・データベースを検索 |
-| `API-update-a-block` | 既存ブロックを更新 |
+| `API-post-search`          | ページ・データベースを検索 |
+| `API-update-a-block`       | 既存ブロックを更新         |
 
 ### 画像生成（generate-image.js）
 
@@ -299,6 +302,7 @@ AIが余分な線・ボックスを生成する問題を防ぐため、以下を
 5. **テキスト誤字防止** — `All text must be spelled correctly. No typos.`
 
 **パターン別テンプレート**:
+
 - 縦積みアーキテクチャ: `Vertical layout top-to-bottom. Exactly [N] boxes stacked.`
 - 左右クライアント-サーバー: `LEFT box labeled 'Client'. RIGHT box labeled 'Server'. Arrows between them in order top-to-bottom.`
 - 時系列ステップ: `[N] sequential steps arranged LEFT-TO-RIGHT with arrows between consecutive steps.`
@@ -306,9 +310,9 @@ AIが余分な線・ボックスを生成する問題を防ぐため、以下を
 
 ### 利用可能なPrompt Files（`.github/prompts/`）
 
-| プロンプト | 説明 |
-|---|---|
-| `create-blog-post` | MCP経由で新規ブログ記事を作成 |
-| `create-story` | MCP経由で短編小説を作成 |
-| `add-thumbnail` | サムネイル画像を設定（画像生成 + R2アップロード） |
-| `nano-banana-pro` | 画像生成（generate-image.js / Gemini API） |
+| プロンプト         | 説明                                              |
+| ------------------ | ------------------------------------------------- |
+| `create-blog-post` | MCP経由で新規ブログ記事を作成                     |
+| `create-story`     | MCP経由で短編小説を作成                           |
+| `add-thumbnail`    | サムネイル画像を設定（画像生成 + R2アップロード） |
+| `nano-banana-pro`  | 画像生成（generate-image.js / Gemini API）        |
