@@ -157,6 +157,20 @@ R2_PUBLIC_URL=https://images.sssstudy.com
 - **バケット名**: `sss-blog-images`
 - **公開URL**: `https://images.sssstudy.com`
 
+### 画像生成（generate-image.js）
+
+`generate-image.js` スクリプトを使用して画像を生成します。
+
+```bash
+node $GENERATE_IMAGE_SCRIPT "プロンプト"
+```
+
+- 環境変数 `GENERATE_IMAGE_SCRIPT`: スクリプトのパス（`C:\dev\git\scripts\generate-image.js`）
+- 環境変数 `GEMINI_IMAGE_API_KEY`: Gemini APIキー
+- モデル: `gemini-3.1-flash-image-preview`
+- 出力パス省略時はシステム一時ディレクトリに保存（ローカルにファイルが溜まらない）
+- 出力先のパスはコンソールに表示されるので、R2アップロード時に使用する
+
 ### アップロード方法
 
 ```bash
@@ -166,6 +180,58 @@ npm run r2:upload -- ./image.png
 # 保存先パスを指定（推奨）
 npm run r2:upload -- ./image.png thumbnails/my-article.png
 ```
+
+### 記事本文内画像のガイドライン
+
+#### スタイル
+- **手書き風（ホワイトボードスケッチ）スタイルを採用する**
+  - 鉛筆・ペン書き風のラフなスケッチスタイル
+  - 白背景に黒インクのシンプルな図解
+  - 洗練されたデザインよりも、読者の理解を助けることを優先する
+- 生成プロンプトには以下を含める: `hand-drawn whiteboard sketch`, `rough pencil sketch style`, `white background`, `educational illustration`
+
+#### ブロック図・アーキテクチャ図のプロンプト作成ルール
+
+AIが余分な線・ボックスを生成する問題を防ぐため、以下を厳守する:
+
+1. **要素数を明示** — `Draw EXACTLY [N] rectangular boxes and [M] arrows`
+2. **各ボックスを番号付きで列挙** — `(1) Top box labeled '...', (2) Middle box labeled '...'`
+3. **各矢印を向き・ラベル付きで列挙** — `A single arrow pointing RIGHT from 'A' to 'B', labeled 'ラベル' above the arrow`
+4. **余計なものを禁止** — 必ず末尾に `Draw ONLY these [N] boxes and [M] arrows. NO extra lines, NO extra boxes.` を入れる
+5. **テキスト誤字防止** — `All text must be spelled correctly in English and Japanese. No typos.`
+
+**レイアウト指定例**:
+- 縦積み: `Vertical layout top-to-bottom`
+- 横並び: `Horizontal left-to-right layout`
+- 階層: `Hierarchical: X at top, Y and Z at middle level, W at bottom`
+- 時系列フロー: `[N] sequential steps arranged LEFT-TO-RIGHT with arrows between each step`
+
+#### 挿入位置
+- **記事の途中、説明の補助として挿入する**（冒頭や末尾にまとめて置かない）
+- 図解する内容の直前・直後に配置する（説明→画像の順が自然）
+- 1記事あたり2枚程度を目安に、記事内で分散して配置する
+- 例: 概念説明の直後、コードブロックの前、手順の要約として
+
+#### Notionページへの追加手順
+1. `node C:/dev/git/scripts/generate-image.js "プロンプト"` で手書き風画像を生成
+2. `npm run r2:upload -- <生成ファイルパス> articles/{スラッグ}/image-name.png` でR2にアップロード
+3. Notion MCPで `update_content` を使い、対象セクションの直後に挿入:
+   - `old_str`: 挿入したい場所の直前のテキスト
+   - `new_str`: 同テキスト + `\n\n![説明](https://images.sssstudy.com/articles/{スラッグ}/image-name.png)\n\n`
+
+### 画像差し替え時のルール
+
+**既存の画像を新しい画像に置き換えた場合、必ず旧画像をR2から削除すること。**
+
+```bash
+# 旧画像を削除してから新画像をアップロードする
+npm run r2:delete -- articles/{スラッグ}/old-image.png
+npm run r2:upload -- ./new-image.png articles/{スラッグ}/new-image.png
+```
+
+- 差し替えた画像を放置するとR2に孤立ファイルが蓄積する
+- 記事スラッグを変更した場合も旧スラッグディレクトリの画像をすべて削除する
+- サムネイル（`thumbnails/`）を差し替えた場合も同様に旧ファイルを削除する
 
 ### ディレクトリ構成（推奨）
 

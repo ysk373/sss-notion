@@ -8,9 +8,29 @@
       "Bash(cat:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "mcp__claude_ai_Notion__notion-create-pages",
+      "Bash(node:*)",
+      "Bash(npm run:*)",
+      "mcp__claude_ai_Notion__notion-update-page",
+      "mcp__claude_ai_Notion__notion-fetch",
+      "mcp__claude_ai_Notion__notion-search",
+      "Bash(npx wrangler:*)"
     ],
     "deny": [],
     "ask": []
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"const d=JSON.parse(require('fs').readFileSync(0,'utf8'));const fp=d.file_path||'';const ext=fp.split('.').pop().toLowerCase();if(['js','ts','astro','css','json','md','mjs','cjs','tsx','jsx'].includes(ext)){try{require('child_process').execSync('npx prettier --write '+JSON.stringify(fp),{stdio:'pipe'})}catch(e){}}\" 2>/dev/null; exit 0"
+          }
+        ]
+      }
+    ]
   }
 }
