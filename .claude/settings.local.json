@@ -8,7 +8,8 @@
       "Bash(cat:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "mcp__2daf8304-e88c-4b4a-a8ad-c03966e37e65__notion-create-pages"
     ],
     "deny": [],
     "ask": []
