@@ -35,11 +35,13 @@ node $GENERATE_IMAGE_SCRIPT "プロンプト"
 ### 例
 
 基本的な画像生成（一時ディレクトリに保存）:
+
 ```bash
 node $GENERATE_IMAGE_SCRIPT "a cat playing piano in watercolor style"
 ```
 
 出力先を指定する場合:
+
 ```bash
 node $GENERATE_IMAGE_SCRIPT "modern tech blog thumbnail, clean design, 16:9 aspect ratio, minimalist" "./output/thumbnail.png"
 ```
@@ -59,6 +61,7 @@ node $GENERATE_IMAGE_SCRIPT "modern tech blog thumbnail, clean design, 16:9 aspe
 ### サムネイル画像向けプロンプト
 
 ブログ記事のサムネイルには以下を意識:
+
 - シンプルで目を引くデザイン
 - テキストが重ねやすい余白のある構図
 - 16:9のアスペクト比を明示
@@ -88,26 +91,31 @@ Draw ONLY these 3 boxes and 2 arrows. NO extra lines, NO extra boxes, NO decorat
 #### 要素の書き方テンプレート
 
 **ボックス指定**
+
 - `Rectangle box labeled 'ラベル'` — 矩形ボックス
 - `with subtitle '補足テキスト'` — ボックス内サブテキスト
 - 位置: `on the LEFT / in the CENTER / on the RIGHT` / `TOP / BOTTOM`
 
 **矢印指定**
+
 - `A single arrow pointing RIGHT from 'A' to 'B', labeled 'ラベル' above the arrow` — 単方向
 - `A bidirectional arrow between 'A' and 'B', labeled 'ラベル'` — 双方向
 - フィードバック矢印は `dashed arrow` で指定
 
 **レイアウト指定**
+
 - `Vertical layout top-to-bottom`
 - `Horizontal left-to-right layout`
 - `Hierarchical: X at top, Y and Z at middle, W at bottom`
 
 **「それだけ描く」宣言（必須）**
+
 ```
 Draw ONLY these [N] boxes and [M] arrows. No extra lines, no extra boxes, no decorations.
 ```
 
 **テキスト誤字防止**
+
 ```
 All text must be spelled correctly in English and Japanese. No typos.
 ```
