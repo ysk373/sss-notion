@@ -72,7 +72,10 @@ const FIXED_PAGE_SLUGS = new Set([
 ])
 
 export function isFixedPagePost(post: Post): boolean {
-  return FIXED_PAGE_SLUGS.has(post.Slug) || post.Tags.some((tag) => tag.name === 'Info')
+  return (
+    FIXED_PAGE_SLUGS.has(post.Slug) ||
+    post.Tags.some((tag) => tag.name === 'Info')
+  )
 }
 
 export async function getContentPosts(): Promise<Post[]> {
@@ -100,7 +103,9 @@ function validateContentPosts(posts: Post[]): void {
     .filter(([, count]) => count > 1)
     .map(([slug]) => slug)
   if (duplicatedSlugs.length > 0) {
-    throw new Error(`公開記事のSlugが重複しています: ${duplicatedSlugs.join(', ')}`)
+    throw new Error(
+      `公開記事のSlugが重複しています: ${duplicatedSlugs.join(', ')}`
+    )
   }
 }
 

@@ -3,7 +3,10 @@ import { getContentPosts, getDatabase } from '../lib/notion/client'
 import { getPostLink } from '../lib/blog-helpers'
 
 export async function GET() {
-  const [posts, database] = await Promise.all([getContentPosts(), getDatabase()])
+  const [posts, database] = await Promise.all([
+    getContentPosts(),
+    getDatabase(),
+  ])
 
   return rss({
     title: database.Title,
