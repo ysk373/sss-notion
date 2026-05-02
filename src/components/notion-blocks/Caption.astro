@@ -6,12 +6,16 @@ export interface Props {
 }
 
 const { richTexts } = Astro.props
+const captionText = richTexts
+  .map((richText) => richText.PlainText)
+  .join('')
+  .trim()
 ---
 
 {
-  richTexts.length > 0 && richTexts[0].Text.Content && (
+  captionText && (
     <div class="caption">
-      <div>{richTexts[0].Text.Content}</div>
+      <div>{captionText}</div>
     </div>
   )
 }

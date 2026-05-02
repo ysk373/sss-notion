@@ -3,6 +3,8 @@
  * AuthorProfile.astro
  * サイドバーに表示する著者プロフィールブロック
  */
+import { getNavLink } from '../lib/blog-helpers.ts'
+import { SITE_AUTHOR } from '../constants/site-author.ts'
 
 interface Props {
     name?: string
@@ -11,10 +13,12 @@ interface Props {
 }
 
 const {
-    name = 'Yusuke',
-    description = '組み込みシステムエンジニア。DSP開発、自動車業界での経験を活かし、技術ブログを運営中。投資にも興味あり。',
+    name = SITE_AUTHOR.name,
+    description = SITE_AUTHOR.description,
     avatarUrl = '',
 } = Astro.props
+
+const aboutHref = getNavLink(`/posts/${SITE_AUTHOR.aboutSlug}`)
 ---
 
 <div class="author-profile">
@@ -30,7 +34,11 @@ const {
         }
     </div>
     <h3 class="author-name">{name}</h3>
+    <p class="author-role">{SITE_AUTHOR.jobTitle}</p>
     <p class="author-description">{description}</p>
+    <p class="author-about-link-wrap">
+        <a href={aboutHref} class="author-about-link">運営者情報を見る</a>
+    </p>
 </div>
 
 <style>
@@ -76,16 +84,34 @@ const {
     }
 
     .author-name {
-        margin: 0 0 0.5rem;
+        margin: 0 0 0.25rem;
         font-size: 1.1rem;
         font-weight: 700;
         color: var(--sss-text, #333);
     }
 
+    .author-role {
+        margin: 0 0 0.5rem;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        color: var(--sss-text-light, #666);
+    }
+
     .author-description {
-        margin: 0;
+        margin: 0 0 0.75rem;
         font-size: 0.85rem;
         line-height: 1.6;
         color: var(--sss-text-light, #666);
+    }
+
+    .author-about-link-wrap {
+        margin: 0;
+        font-size: 0.85rem;
+    }
+
+    .author-about-link {
+        font-weight: 500;
+        text-decoration: underline;
+        text-underline-offset: 2px;
     }
 </style>

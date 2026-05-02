@@ -1,4 +1,22 @@
 /* トップページ: カテゴリセクション */
+.siteIntro {
+  margin-bottom: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--sss-border, #eaeaea);
+  border-radius: 12px;
+  background: var(--sss-bg-secondary, #f8f8f8);
+}
+
+.siteIntro h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.siteIntro p {
+  margin: 0;
+  line-height: 1.8;
+}
+
 .categorySection {
   margin-bottom: 3.5rem;
 }

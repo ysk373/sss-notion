@@ -2,7 +2,7 @@
 import type { SelectProperty } from '../lib/interfaces.ts'
 import { getTagLink } from '../lib/blog-helpers.ts'
 import NoContents from './NoContents.astro'
-import { getAllPosts } from '../lib/notion/client.ts'
+import { getContentPosts } from '../lib/notion/client.ts'
 import '../styles/notion-color.css'
 
 export interface Props {
@@ -13,7 +13,7 @@ export interface Props {
 const { heading, tags } = Astro.props
 
 // タグの階層構造を構築するため、全記事データを取得してタグの併用状況を調べる
-const allPosts = await getAllPosts()
+const contentPosts = await getContentPosts()
 
 interface TagHierarchy {
   baseTag: SelectProperty
@@ -37,7 +37,7 @@ tags.forEach((tag) => {
 
 // 2. 記事についているタグから親子関係を導き出す
 // 同一記事内に親タグ(pink)と子タグ(pink以外)が共存していれば紐付ける
-allPosts.forEach((post) => {
+contentPosts.forEach((post) => {
   const parentTags = post.Tags.filter((t) => t.color === PARENT_COLOR)
   const childTags = post.Tags.filter(
     (t) => t.color !== PARENT_COLOR && t.name !== 'Info'

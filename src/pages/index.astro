@@ -31,11 +31,19 @@ const categoryPosts = await Promise.all(
 
 <Layout
   title="トップページ"
-  description="最新記事のカテゴリ別まとめ"
+  description="組み込みエンジニアの技術メモ、ROS2/TurtleBot3の学習記録、NISAや家計管理の学習記録をまとめたブログです。"
   path="/"
   ogImage=""
 >
   <div slot="main">
+    <section class={styles.siteIntro}>
+      <h2>このブログで読めること</h2>
+      <p>
+        組み込みシステムエンジニアが、ROS2やTurtleBot3などの技術学習、
+        NotionとAstroによるブログ運用、30代からのNISA・家計管理の学習記録を残しています。
+        技術記事を主軸に、投資記事は個人の学習メモとして扱います。
+      </p>
+    </section>
     {
       categoryPosts.map(({ tag, posts }) => {
         if (posts.length === 0) return null
@@ -73,7 +81,7 @@ const categoryPosts = await Promise.all(
 
   <div slot="aside" class={styles.aside}>
     <AuthorProfile />
-    <BlogPostsLink heading="Recommended" posts={rankedPosts} />
-    <BlogTagsLink heading="Categories" tags={tags} />
+    <BlogPostsLink heading="おすすめ記事" posts={rankedPosts} />
+    <BlogTagsLink heading="カテゴリ" tags={tags} />
   </div>
 </Layout>

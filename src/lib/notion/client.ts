@@ -64,6 +64,45 @@ let postsCache: Post[] | null = null
 let dbCache: Database | null = null
 
 const numberOfRetry = 2
+const FIXED_PAGE_SLUGS = new Set([
+  'about',
+  'contact',
+  'privacy-policy',
+  'disclaimer',
+])
+
+export function isFixedPagePost(post: Post): boolean {
+  return FIXED_PAGE_SLUGS.has(post.Slug) || post.Tags.some((tag) => tag.name === 'Info')
+}
+
+export async function getContentPosts(): Promise<Post[]> {
+  const allPosts = await getAllPosts()
+  const contentPosts = allPosts.filter((post) => !isFixedPagePost(post))
+  validateContentPosts(contentPosts)
+  return contentPosts
+}
+
+function validateContentPosts(posts: Post[]): void {
+  const missingExcerpt = posts.filter((post) => !post.Excerpt.trim())
+  if (missingExcerpt.length > 0) {
+    throw new Error(
+      `公開記事のExcerptが未入力です: ${missingExcerpt
+        .map((post) => post.Slug)
+        .join(', ')}`
+    )
+  }
+
+  const slugCounts = posts.reduce<Record<string, number>>((acc, post) => {
+    acc[post.Slug] = (acc[post.Slug] || 0) + 1
+    return acc
+  }, {})
+  const duplicatedSlugs = Object.entries(slugCounts)
+    .filter(([, count]) => count > 1)
+    .map(([slug]) => slug)
+  if (duplicatedSlugs.length > 0) {
+    throw new Error(`公開記事のSlugが重複しています: ${duplicatedSlugs.join(', ')}`)
+  }
+}
 
 export async function getAllPosts(): Promise<Post[]> {
   if (postsCache !== null) {
@@ -135,17 +174,13 @@ export async function getAllPosts(): Promise<Post[]> {
 }
 
 export async function getPosts(pageSize = 10): Promise<Post[]> {
-  const allPosts = await getAllPosts()
-  // Infoタグを持つ固定ページを除外
-  const filteredPosts = allPosts.filter(
-    (post) => !post.Tags.some((tag) => tag.name === 'Info')
-  )
-  return filteredPosts.slice(0, pageSize)
+  const contentPosts = await getContentPosts()
+  return contentPosts.slice(0, pageSize)
 }
 
 export async function getRankedPosts(pageSize = 10): Promise<Post[]> {
-  const allPosts = await getAllPosts()
-  return allPosts
+  const contentPosts = await getContentPosts()
+  return contentPosts
     .filter((post) => !!post.Rank)
     .sort((a, b) => {
       if (a.Rank > b.Rank) {
@@ -174,8 +209,8 @@ export async function getPostsByTag(
 ): Promise<Post[]> {
   if (!tagName) return []
 
-  const allPosts = await getAllPosts()
-  return allPosts
+  const contentPosts = await getContentPosts()
+  return contentPosts
     .filter((post) => post.Tags.find((tag) => tag.name === tagName))
     .slice(0, pageSize)
 }
@@ -186,11 +221,7 @@ export async function getPostsByPage(page: number): Promise<Post[]> {
     return []
   }
 
-  const allPosts = await getAllPosts()
-  // Infoタグを持つ固定ページを除外
-  const filteredPosts = allPosts.filter(
-    (post) => !post.Tags.some((tag) => tag.name === 'Info')
-  )
+  const filteredPosts = await getContentPosts()
 
   const startIndex = (page - 1) * NUMBER_OF_POSTS_PER_PAGE
   const endIndex = startIndex + NUMBER_OF_POSTS_PER_PAGE
@@ -207,8 +238,8 @@ export async function getPostsByTagAndPage(
     return []
   }
 
-  const allPosts = await getAllPosts()
-  const posts = allPosts.filter((post) =>
+  const contentPosts = await getContentPosts()
+  const posts = contentPosts.filter((post) =>
     post.Tags.find((tag) => tag.name === tagName)
   )
 
@@ -219,11 +250,7 @@ export async function getPostsByTagAndPage(
 }
 
 export async function getNumberOfPages(): Promise<number> {
-  const allPosts = await getAllPosts()
-  // Infoタグを持つ固定ページを除外
-  const filteredPosts = allPosts.filter(
-    (post) => !post.Tags.some((tag) => tag.name === 'Info')
-  )
+  const filteredPosts = await getContentPosts()
   return (
     Math.floor(filteredPosts.length / NUMBER_OF_POSTS_PER_PAGE) +
     (filteredPosts.length % NUMBER_OF_POSTS_PER_PAGE > 0 ? 1 : 0)
@@ -231,8 +258,8 @@ export async function getNumberOfPages(): Promise<number> {
 }
 
 export async function getNumberOfPagesByTag(tagName: string): Promise<number> {
-  const allPosts = await getAllPosts()
-  const posts = allPosts.filter((post) =>
+  const contentPosts = await getContentPosts()
+  const posts = contentPosts.filter((post) =>
     post.Tags.find((tag) => tag.name === tagName)
   )
   return (
@@ -372,13 +399,12 @@ export async function getBlock(blockId: string): Promise<Block> {
 }
 
 export async function getAllTags(): Promise<SelectProperty[]> {
-  const allPosts = await getAllPosts()
+  const contentPosts = await getContentPosts()
 
   const tagNames: string[] = []
-  return allPosts
+  return contentPosts
     .flatMap((post) => post.Tags)
     .reduce((acc, tag) => {
-      // Infoタグはサイドバーに表示しない
       if (!tagNames.includes(tag.name) && tag.name !== 'Info') {
         acc.push(tag)
         tagNames.push(tag.name)

@@ -1,9 +1,9 @@
 import rss from '@astrojs/rss'
-import { getAllPosts, getDatabase } from '../lib/notion/client'
+import { getContentPosts, getDatabase } from '../lib/notion/client'
 import { getPostLink } from '../lib/blog-helpers'
 
 export async function GET() {
-  const [posts, database] = await Promise.all([getAllPosts(), getDatabase()])
+  const [posts, database] = await Promise.all([getContentPosts(), getDatabase()])
 
   return rss({
     title: database.Title,

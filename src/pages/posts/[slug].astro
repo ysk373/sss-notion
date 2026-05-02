@@ -3,6 +3,7 @@ import * as interfaces from '../../lib/interfaces.ts'
 import {
   getPosts,
   getAllPosts,
+  getContentPosts,
   getRankedPosts,
   getPostBySlug,
   getPostsByTag,
@@ -10,12 +11,15 @@ import {
   getAllTags,
   getAllBlocksByBlockId,
   downloadFile,
+  getDatabase,
 } from '../../lib/notion/client.ts'
 import {
   getPostLink,
+  getNavLink,
   filePath,
   extractTargetBlocks,
 } from '../../lib/blog-helpers.ts'
+import { SITE_AUTHOR } from '../../constants/site-author.ts'
 import Layout from '../../layouts/Layout.astro'
 import PostDate from '../../components/PostDate.astro'
 import PostTags from '../../components/PostTags.astro'
@@ -24,6 +28,7 @@ import PostBody from '../../components/PostBody.astro'
 import PostRelativeLink from '../../components/PostRelativeLink.astro'
 import BlogPostsLink from '../../components/BlogPostsLink.astro'
 import BlogTagsLink from '../../components/BlogTagsLink.astro'
+import PostAuthorFooter from '../../components/PostAuthorFooter.astro'
 import styles from '../../styles/blog.module.css'
 
 export async function getStaticPaths() {
@@ -38,14 +43,15 @@ if (!post) {
   throw new Error(`Post not found. slug: ${slug}`)
 }
 
-const [blocks, allPosts, rankedPosts, recentPosts, tags, postsHavingSameTag] =
+const [blocks, allPosts, rankedPosts, recentPosts, tags, postsHavingSameTag, database] =
   await Promise.all([
     getAllBlocksByBlockId(post.PageId),
-    getAllPosts(),
+    getContentPosts(),
     getRankedPosts(),
     getPosts(5),
     getAllTags(),
     getPostsByTag(post.Tags[0]?.name, 6),
+    getDatabase(),
   ])
 
 const fileAtacchedBlocks = extractTargetBlocks('image', blocks)
@@ -92,7 +98,36 @@ const nextPost = allPosts[currentPostIndex - 1]
 
 let ogImage = ''
 if (post.FeaturedImage && post.FeaturedImage.Url) {
-  ogImage = new URL(filePath(new URL(post.FeaturedImage.Url)), Astro.site)
+  ogImage = new URL(filePath(new URL(post.FeaturedImage.Url)), Astro.site).toString()
+}
+
+const authorUrl = new URL(
+  getNavLink(`/posts/${SITE_AUTHOR.aboutSlug}`),
+  Astro.site
+).toString()
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.Title,
+  description: post.Excerpt,
+  datePublished: post.Date,
+  dateModified: post.Date,
+  author: {
+    '@type': 'Person',
+    name: SITE_AUTHOR.name,
+    url: authorUrl,
+    jobTitle: SITE_AUTHOR.jobTitle,
+    description: SITE_AUTHOR.description,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: database.Title,
+    url: new URL(getNavLink('/'), Astro.site).toString(),
+  },
+  image: ogImage || undefined,
+  url: new URL(getPostLink(post.Slug), Astro.site).toString(),
+  inLanguage: 'ja',
 }
 ---
 
@@ -101,6 +136,7 @@ if (post.FeaturedImage && post.FeaturedImage.Url) {
   description={post.Excerpt}
   path={getPostLink(post.Slug)}
   ogImage={ogImage}
+  structuredData={structuredData}
 >
   <div slot="main" class={styles.singlePost}>
     <div class={styles.postContent}>
@@ -108,6 +144,7 @@ if (post.FeaturedImage && post.FeaturedImage.Url) {
       <PostTags post={post} />
       <PostTitle post={post} enableLink={false} />
       <PostBody blocks={blocks} />
+      <PostAuthorFooter />
       <PostTags post={post} />
 
       <footer>
@@ -118,13 +155,13 @@ if (post.FeaturedImage && post.FeaturedImage.Url) {
 
   <div slot="aside" class="aside">
     <BlogPostsLink
-      heading="Posts in the same category"
+      heading="同じカテゴリの記事"
       posts={postsHavingSameTag.filter(
         (p: interfaces.Post) => p.Slug !== post.Slug
       )}
     />
-    <BlogPostsLink heading="Recommended" posts={rankedPosts} />
-    <BlogPostsLink heading="Latest posts" posts={recentPosts} />
-    <BlogTagsLink heading="Categories" tags={tags} />
+    <BlogPostsLink heading="おすすめ記事" posts={rankedPosts} />
+    <BlogPostsLink heading="最新記事" posts={recentPosts} />
+    <BlogTagsLink heading="カテゴリ" tags={tags} />
   </div>
 </Layout>

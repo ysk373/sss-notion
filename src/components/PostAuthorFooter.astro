@@ -1,0 +1,122 @@
+---
+/**
+ * 個別記事本文の直下に表示する著者ブロック（E-E-A-T・ナビゲーション用）
+ */
+import { getNavLink } from '../lib/blog-helpers.ts'
+import { SITE_AUTHOR } from '../constants/site-author.ts'
+
+const aboutHref = getNavLink(`/posts/${SITE_AUTHOR.aboutSlug}`)
+---
+
+<section class="post-author-footer" aria-labelledby="post-author-heading">
+  <h2 id="post-author-heading" class="post-author-heading">この記事を書いた人</h2>
+  <div class="post-author-inner">
+    <div class="post-author-avatar" aria-hidden="true">
+      <span class="post-author-initial">{SITE_AUTHOR.name.charAt(0)}</span>
+    </div>
+    <div class="post-author-body">
+      <p class="post-author-name">{SITE_AUTHOR.name}</p>
+      <p class="post-author-role">{SITE_AUTHOR.jobTitle}</p>
+      <p class="post-author-bio">{SITE_AUTHOR.description}</p>
+      <p class="post-author-link-wrap">
+        <a href={aboutHref} class="post-author-about-link">運営者情報（プロフィール）</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .post-author-footer {
+    margin-top: 2.5rem;
+    padding: 1.25rem 1.25rem 1.35rem;
+    border: 1px solid var(--sss-border-light, #f3f4f6);
+    border-radius: var(--radius, 8px);
+    background: var(--sss-bg-secondary, #fafafa);
+  }
+
+  .post-author-heading {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--fg, #333);
+  }
+
+  .post-author-inner {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .post-author-avatar {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      var(--sss-primary, #2563eb),
+      var(--sss-primary-dark, #1d4ed8)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .post-author-initial {
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .post-author-body {
+    min-width: 0;
+  }
+
+  .post-author-name {
+    margin: 0 0 0.2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--fg, #333);
+  }
+
+  .post-author-role {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    color: var(--accents-1, #666);
+  }
+
+  .post-author-bio {
+    margin: 0 0 0.65rem;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--fg, #333);
+  }
+
+  .post-author-link-wrap {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .post-author-about-link {
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .post-author-about-link:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .post-author-inner {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .post-author-body {
+      width: 100%;
+    }
+  }
+</style>

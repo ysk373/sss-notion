@@ -16,6 +16,11 @@ if (block.Image.External) {
 } else if (block.Image.File) {
   image = filePath(new URL(block.Image.File.Url))
 }
+
+const captionText = block.Image.Caption.map((richText) => richText.PlainText)
+  .join('')
+  .trim()
+const altText = captionText || '記事内容を補足する画像'
 ---
 
 <figure class="image">
@@ -25,10 +30,10 @@ if (block.Image.External) {
         <div>
           {ENABLE_LIGHTBOX ? (
             <a data-fslightbox href={image} data-type="image">
-              <img src={image} alt="Image in a image block" loading="lazy" />
+              <img src={image} alt={altText} loading="lazy" />
             </a>
           ) : (
-            <img src={image} alt="Image in a image block" loading="lazy" />
+            <img src={image} alt={altText} loading="lazy" />
           )}
         </div>
         <Caption richTexts={block.Image.Caption} />

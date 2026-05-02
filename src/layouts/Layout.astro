@@ -2,6 +2,7 @@
 import { PUBLIC_GA_TRACKING_ID, ENABLE_LIGHTBOX } from '../server-constants.ts'
 import { getDatabase } from '../lib/notion/client.ts'
 import { getNavLink, getStaticFilePath, filePath } from '../lib/blog-helpers.ts'
+import { SITE_AUTHOR } from '../constants/site-author.ts'
 import '../styles/syntax-coloring.css'
 import '../styles/sss-theme.css'
 import GoogleAnalytics from '../components/GoogleAnalytics.astro'
@@ -13,9 +14,16 @@ export interface Props {
   description: string
   path: string
   ogImage: string
+  structuredData?: Record<string, unknown> | Record<string, unknown>[]
 }
 
-const { title = '', description = '', path = '/', ogImage = '' } = Astro.props
+const {
+  title = '',
+  description = '',
+  path = '/',
+  ogImage = '',
+  structuredData,
+} = Astro.props
 
 const database = await getDatabase()
 
@@ -26,6 +34,33 @@ const siteOGImage = new URL(
   getStaticFilePath('/default-og-image.png'),
   Astro.site
 )
+const authorPerson = {
+  '@type': 'Person',
+  name: SITE_AUTHOR.name,
+  url: new URL(getNavLink(`/posts/${SITE_AUTHOR.aboutSlug}`), Astro.site).toString(),
+  jobTitle: SITE_AUTHOR.jobTitle,
+  description: SITE_AUTHOR.description,
+}
+
+const websiteStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: database.Title,
+  description: database.Description,
+  url: new URL(getNavLink('/'), Astro.site).toString(),
+  inLanguage: 'ja',
+  author: authorPerson,
+  publisher: {
+    '@type': 'Organization',
+    name: database.Title,
+    url: new URL(getNavLink('/'), Astro.site).toString(),
+  },
+}
+const structuredDataItems = structuredData
+  ? [websiteStructuredData].concat(
+      Array.isArray(structuredData) ? structuredData : [structuredData]
+    )
+  : [websiteStructuredData]
 
 let coverImageURL: string
 if (database.Cover) {
@@ -74,6 +109,7 @@ if (database.Icon && database.Icon.Type === 'file') {
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={siteDescription} />
     <meta property="og:site_name" content={database.Title} />
+    <meta property="og:locale" content="ja_JP" />
     <meta property="og:image" content={ogImage || siteOGImage} />
     <meta name="twitter:title" content={siteTitle} />
     <meta name="twitter:description" content={siteDescription} />
@@ -97,6 +133,10 @@ if (database.Icon && database.Icon.Type === 'file') {
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9556539244431884"
       crossorigin="anonymous"></script>
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(structuredDataItems)}
+    />
   </head>
   <body>
     <GoogleAnalytics trackingId={PUBLIC_GA_TRACKING_ID} />
@@ -105,7 +145,7 @@ if (database.Icon && database.Icon.Type === 'file') {
         {
           coverImageURL && (
             <div class="cover">
-              <img src={coverImageURL} alt="Site cover image" loading="lazy" />
+              <img src={coverImageURL} alt={`${database.Title}のカバー画像`} loading="lazy" />
             </div>
           )
         }
@@ -125,7 +165,7 @@ if (database.Icon && database.Icon.Type === 'file') {
                       </>
                     ) : database.Icon && database.Icon.Type === 'external' ? (
                       <>
-                        <img src={database.Icon.Url} alt="Site icon image" />
+                        <img src={database.Icon.Url} alt={`${database.Title}のアイコン`} />
                         {database.Title}
                       </>
                     ) : database.Icon && database.Icon.Type === 'file' ? (
@@ -133,7 +173,7 @@ if (database.Icon && database.Icon.Type === 'file') {
                         <img
                           src={customIconURL}
                           class="custom-icon"
-                          alt="Site icon image"
+                          alt={`${database.Title}のアイコン`}
                         />
                         {database.Title}
                       </>
