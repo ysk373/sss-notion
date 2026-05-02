@@ -10,10 +10,12 @@ const { post } = Astro.props
 
 let image = ''
 const altText = `${post.Title}のサムネイル画像`
-// DEV でも filePath（/notion/...）を使う。featured-image-downloader が dev 起動時に
-// public/notion へ取得するため、Notion の期限付きURLをブラウザが直読みしない。
 if (post.FeaturedImage && post.FeaturedImage.Url) {
-  image = filePath(new URL(post.FeaturedImage.Url))
+  if (import.meta.env.DEV) {
+    image = post.FeaturedImage.Url
+  } else {
+    image = filePath(new URL(post.FeaturedImage.Url))
+  }
 }
 ---
 
