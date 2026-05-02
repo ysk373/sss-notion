@@ -29,6 +29,9 @@ import PostRelativeLink from '../../components/PostRelativeLink.astro'
 import BlogPostsLink from '../../components/BlogPostsLink.astro'
 import BlogTagsLink from '../../components/BlogTagsLink.astro'
 import PostAuthorFooter from '../../components/PostAuthorFooter.astro'
+import SeriesHubNotice from '../../components/SeriesHubNotice.astro'
+import InvestmentDisclaimer from '../../components/InvestmentDisclaimer.astro'
+import { resolveSeriesHub, isInvestmentPost } from '../../constants/series-hubs.ts'
 import styles from '../../styles/blog.module.css'
 
 export async function getStaticPaths() {
@@ -106,6 +109,9 @@ const authorUrl = new URL(
   Astro.site
 ).toString()
 
+const seriesHub = resolveSeriesHub(post)
+const showInvestmentDisclaimer = isInvestmentPost(post)
+
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -143,6 +149,12 @@ const structuredData = {
       <PostDate post={post} />
       <PostTags post={post} />
       <PostTitle post={post} enableLink={false} />
+      {
+        seriesHub && (
+          <SeriesHubNotice hubSlug={seriesHub.hubSlug} label={seriesHub.label} />
+        )
+      }
+      {showInvestmentDisclaimer && <InvestmentDisclaimer />}
       <PostBody blocks={blocks} />
       <PostAuthorFooter />
       <PostTags post={post} />

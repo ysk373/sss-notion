@@ -1,0 +1,47 @@
+---
+/**
+ * シリーズ目次ページへの導線（1行 + リンク）
+ */
+import { getPostLink } from '../lib/blog-helpers.ts'
+
+export interface Props {
+  hubSlug: string
+  label: string
+}
+
+const { hubSlug, label } = Astro.props
+const href = getPostLink(hubSlug)
+---
+
+<p class="series-hub-notice">
+  <span class="series-hub-notice__tag">シリーズ</span>
+  <span class="series-hub-notice__text"
+    >この記事は「{label}」の一部です。</span
+  >
+  <a class="series-hub-notice__link" href={href}>シリーズ目次を見る</a>
+</p>
+
+<style>
+  .series-hub-notice {
+    margin: 0 0 1rem;
+    padding: 0.75rem 1rem;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    border-radius: var(--radius);
+    background: rgba(227, 226, 224, 0.45);
+  }
+  .series-hub-notice__tag {
+    display: inline-block;
+    margin-right: 0.35rem;
+    padding: 0.05rem 0.4rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    background: var(--fg);
+    color: var(--bg);
+  }
+  .series-hub-notice__link {
+    margin-left: 0.35rem;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+</style>

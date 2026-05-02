@@ -1,0 +1,15 @@
+---
+description: SSS Notion project-wide AI guidance
+alwaysApply: true
+---
+
+# SSS Notion Project Rules
+
+このリポジトリの AI 向け正本は `AGENTS.md` です。作業前に `AGENTS.md` を参照してください。
+
+- 返答と作業説明は日本語で行う。
+- 記事本文は Notion を正とし、リポジトリ内 Markdown として作らない。
+- コードは最小構成を優先し、初学者にも読みやすい命名・分割にする。
+- シリーズ目次は `series-*` の Notion ページと `src/constants/series-hubs.ts` を同期する。
+- 投資記事の免責は `src/components/InvestmentDisclaimer.astro` を正とする。
+- 秘密情報をハードコードしない。`.env` や API キーをコミット対象にしない。
