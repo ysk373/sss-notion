@@ -1,4 +1,5 @@
 import type { AstroIntegration } from 'astro'
+import { DATABASE_ID, NOTION_API_SECRET } from '../server-constants.ts'
 import { getAllPosts, downloadFile } from '../lib/notion/client'
 
 /**
@@ -28,6 +29,38 @@ async function downloadAllFeaturedImages(): Promise<void> {
   )
 }
 
+function notionEnvReady(): boolean {
+  return (
+    Boolean(String(NOTION_API_SECRET || '').trim()) &&
+    Boolean(String(DATABASE_ID || '').trim())
+  )
+}
+
+/** local dev: Notion 未設定や API エラーでもサーバーは起動させる */
+async function downloadFeaturedImagesForDev(logger: {
+  warn: (msg: string) => void
+  info: (msg: string) => void
+}): Promise<void> {
+  if (!notionEnvReady()) {
+    logger.warn(
+      'Featured images: NOTION_API_SECRET または DATABASE_ID が未設定のためスキップしました。.env を確認してください。'
+    )
+    return
+  }
+
+  logger.info('Fetching featured images for local dev...')
+  try {
+    await downloadAllFeaturedImages()
+    logger.info('Featured images downloaded.')
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    logger.warn(
+      `Featured images: Notion からの取得に失敗したためスキップしました（${msg}）。DATABASE_ID が Notion のデータベースUUIDか、.env が読み込まれているか確認してください。`
+    )
+    console.warn(err)
+  }
+}
+
 export default (): AstroIntegration => ({
   name: 'featured-image-downloader',
   hooks: {
@@ -36,9 +69,7 @@ export default (): AstroIntegration => ({
     },
     /** dev サーバー起動「前」に実行され、localhost でもサムネを同一オリジン配信できる */
     'astro:server:setup': async ({ logger }) => {
-      logger.info('Fetching featured images for local dev...')
-      await downloadAllFeaturedImages()
-      logger.info('Featured images downloaded.')
+      await downloadFeaturedImagesForDev(logger)
     },
   },
 })
