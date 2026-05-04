@@ -5,10 +5,11 @@ import {
   getRankedPosts,
   getAllTags,
   getAllTagsForStaticPaths,
-  getAllPosts,
+  getContentPosts,
   getTagAppearance,
   getNumberOfPagesByTag,
 } from '../../../../../lib/notion/client.ts'
+import { getPageLink } from '../../../../../lib/blog-helpers.ts'
 import Layout from '../../../../../layouts/Layout.astro'
 import NoContents from '../../../../../components/NoContents.astro'
 import PostDate from '../../../../../components/PostDate.astro'
@@ -43,21 +44,22 @@ export async function getStaticPaths() {
 
 const { tag, page } = Astro.params
 
-const [posts, rankedPosts, tags, numberOfPages, allPosts] = await Promise.all([
-  getPostsByTagAndPage(tag, parseInt(page, 10)),
-  getRankedPosts(),
-  getAllTags(),
-  getNumberOfPagesByTag(tag),
-  getAllPosts(),
-])
+const [posts, rankedPosts, tags, numberOfPages, contentPosts] =
+  await Promise.all([
+    getPostsByTagAndPage(tag, parseInt(page, 10)),
+    getRankedPosts(),
+    getAllTags(),
+    getNumberOfPagesByTag(tag),
+    getContentPosts(),
+  ])
 
-const currentTag = getTagAppearance(tag, allPosts)
+const currentTag = getTagAppearance(tag, contentPosts)
 ---
 
 <Layout
   title={`${tag}の記事一覧 ${page}/${numberOfPages}`}
   description={`${tag}カテゴリの記事一覧の${page}ページ目です。`}
-  path={`/posts/tag/${tag}/page/${page}`}
+  path={getPageLink(parseInt(page, 10), tag)}
 >
   <div slot="main" class={styles.main}>
     <header>
@@ -95,7 +97,7 @@ const currentTag = getTagAppearance(tag, allPosts)
 
   <div slot="aside" class={styles.aside}>
     <BlogPostsLink heading="おすすめ記事" posts={rankedPosts} />
-    <BlogTagsLink heading="カテゴリ" tags={tags} />
+    <BlogTagsLink heading="カテゴリ" tags={tags} contentPosts={contentPosts} />
   </div>
 </Layout>
 

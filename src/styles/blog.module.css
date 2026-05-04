@@ -1,3 +1,15 @@
+/* 一覧ページ main レイアウトで利用 */
+.main {
+  width: 100%;
+  flex: 1;
+  min-width: 0;
+}
+
+/* サイドバー枠（Layout の aside と併用） */
+.aside {
+  width: 100%;
+}
+
 /* トップページ: カテゴリセクション */
 .siteIntro {
   margin-bottom: 2.5rem;

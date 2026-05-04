@@ -1,4 +1,4 @@
-import { BASE_PATH, REQUEST_TIMEOUT_MS } from '../server-constants'
+import { BASE_PATH, REQUEST_TIMEOUT_MS } from '../server-constants.ts'
 import type {
   Block,
   Heading1,
@@ -8,6 +8,25 @@ import type {
   Column,
 } from './interfaces'
 import { pathJoin } from './utils'
+
+/** 絶対URL用に論理パスへ揃える（BASE_PATH が付いた文字列でも受けられる） */
+export function stripBasePathForNav(fullPath: string): string {
+  const base = BASE_PATH.trim()
+  let p = fullPath.startsWith('/') ? fullPath : `/${fullPath}`
+  if (!base) {
+    return p
+  }
+  const normalizedBase = base.startsWith('/') ? base : `/${base}`
+  const withSlash =
+    normalizedBase.endsWith('/') ? normalizedBase.slice(0, -1) : normalizedBase
+
+  if (p === withSlash || p.startsWith(`${withSlash}/`)) {
+    const restRaw = p.slice(withSlash.length)
+    const rest = restRaw.startsWith('/') ? restRaw : restRaw ? `/${restRaw}` : '/'
+    return rest === '' ? '/' : rest
+  }
+  return p
+}
 
 export const filePath = (url: URL): string => {
   const [dir, filename] = url.pathname.split('/').slice(-2)

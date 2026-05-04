@@ -1,5 +1,5 @@
 ---
-import type { SelectProperty } from '../lib/interfaces.ts'
+import type { Post, SelectProperty } from '../lib/interfaces.ts'
 import { getTagLink } from '../lib/blog-helpers.ts'
 import NoContents from './NoContents.astro'
 import { getContentPosts } from '../lib/notion/client.ts'
@@ -8,12 +8,13 @@ import '../styles/notion-color.css'
 export interface Props {
   heading: string
   tags: SelectProperty[]
+  contentPosts?: Post[]
 }
 
-const { heading, tags } = Astro.props
+const { heading, tags, contentPosts: contentPostsProp } = Astro.props
 
-// タグの階層構造を構築するため、全記事データを取得してタグの併用状況を調べる
-const contentPosts = await getContentPosts()
+const contentPosts =
+  contentPostsProp !== undefined ? contentPostsProp : await getContentPosts()
 
 interface TagHierarchy {
   baseTag: SelectProperty

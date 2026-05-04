@@ -1,8 +1,18 @@
 ---
 import { PUBLIC_GA_TRACKING_ID, ENABLE_LIGHTBOX } from '../server-constants.ts'
+import type { Database } from '../lib/interfaces.ts'
 import { getDatabase } from '../lib/notion/client.ts'
-import { getNavLink, getStaticFilePath, filePath } from '../lib/blog-helpers.ts'
+import {
+  getNavLink,
+  getStaticFilePath,
+  filePath,
+  stripBasePathForNav,
+} from '../lib/blog-helpers.ts'
 import { SITE_AUTHOR } from '../constants/site-author.ts'
+import {
+  FIXED_PAGE_NAV_SLUGS,
+  FIXED_PAGE_NAV_LABELS,
+} from '../constants/fixed-pages.ts'
 import '../styles/syntax-coloring.css'
 import '../styles/sss-theme.css'
 import GoogleAnalytics from '../components/GoogleAnalytics.astro'
@@ -15,6 +25,7 @@ export interface Props {
   path: string
   ogImage: string
   structuredData?: Record<string, unknown> | Record<string, unknown>[]
+  database?: Database
 }
 
 const {
@@ -23,13 +34,17 @@ const {
   path = '/',
   ogImage = '',
   structuredData,
+  database: databaseProp,
 } = Astro.props
 
-const database = await getDatabase()
+const database = databaseProp ?? (await getDatabase())
 
 const siteTitle = title ? `${title} - ${database.Title}` : database.Title
 const siteDescription = description ? description : database.Description
-const siteURL = new URL(getNavLink(path), Astro.site).toString()
+const siteURL = new URL(
+  getNavLink(stripBasePathForNav(path)),
+  Astro.site
+).toString()
 const siteOGImage = new URL(
   getStaticFilePath('/default-og-image.png'),
   Astro.site
@@ -192,15 +207,22 @@ if (database.Icon && database.Icon.Type === 'file') {
 
             <footer>
               <nav class="footer-links">
-                <a href={getNavLink('/posts/about')}>運営者情報</a>
-                <span class="separator">|</span>
-                <a href={getNavLink('/posts/contact')}>お問い合わせ</a>
-                <span class="separator">|</span>
-                <a href={getNavLink('/posts/privacy-policy')}
-                  >プライバシーポリシー</a
-                >
-                <span class="separator">|</span>
-                <a href={getNavLink('/posts/disclaimer')}>免責事項</a>
+                {
+                  FIXED_PAGE_NAV_SLUGS.map((slug, index) => (
+                    <>
+                      {index > 0 && <span class="separator">|</span>}
+                      <a
+                        href={getNavLink(
+                          slug === 'about'
+                            ? `/posts/${SITE_AUTHOR.aboutSlug}`
+                            : `/posts/${slug}`
+                        )}
+                      >
+                        {FIXED_PAGE_NAV_LABELS[slug]}
+                      </a>
+                    </>
+                  ))
+                }
               </nav>
               <div class="copyright">
                 <span>&copy; 2026 30代エンジニアの備忘録</span>
