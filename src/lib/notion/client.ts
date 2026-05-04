@@ -53,8 +53,8 @@ import type {
   Mention,
   Reference,
 } from '../interfaces'
-import { FIXED_PAGE_NAV_SLUGS } from '../constants/fixed-pages'
-import { SITE_AUTHOR } from '../constants/site-author'
+import { FIXED_PAGE_NAV_SLUGS } from '../../constants/fixed-pages'
+import { SITE_AUTHOR } from '../../constants/site-author'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import { Client, APIResponseError } from '@notionhq/client'
 
