@@ -17,12 +17,17 @@ export function stripBasePathForNav(fullPath: string): string {
     return p
   }
   const normalizedBase = base.startsWith('/') ? base : `/${base}`
-  const withSlash =
-    normalizedBase.endsWith('/') ? normalizedBase.slice(0, -1) : normalizedBase
+  const withSlash = normalizedBase.endsWith('/')
+    ? normalizedBase.slice(0, -1)
+    : normalizedBase
 
   if (p === withSlash || p.startsWith(`${withSlash}/`)) {
     const restRaw = p.slice(withSlash.length)
-    const rest = restRaw.startsWith('/') ? restRaw : restRaw ? `/${restRaw}` : '/'
+    const rest = restRaw.startsWith('/')
+      ? restRaw
+      : restRaw
+        ? `/${restRaw}`
+        : '/'
     return rest === '' ? '/' : rest
   }
   return p
