@@ -14,6 +14,43 @@ export const filePath = (url: URL): string => {
   return pathJoin(BASE_PATH, `/notion/${dir}/${filename}`)
 }
 
+/**
+ * Notion 本文の絶対 URL がサイトオリジン直下で、BASE_PATH が欠けているときだけ補正する。
+ * サブパス配信（例: GitHub Pages の /repo ）で /posts/... が 404 になるのを防ぐ。
+ */
+export function rewriteSameOriginHrefForBasePath(
+  href: string,
+  site: URL | undefined
+): string {
+  if (!href || !site) {
+    return href
+  }
+
+  let parsed: URL
+  try {
+    parsed = new URL(href)
+  } catch {
+    return href
+  }
+
+  if (parsed.origin !== site.origin) {
+    return href
+  }
+
+  const base = BASE_PATH || ''
+  if (!base) {
+    return href
+  }
+
+  const path = parsed.pathname
+  if (path === base || path.startsWith(`${base}/`)) {
+    return href
+  }
+
+  parsed.pathname = pathJoin(base, path) || path
+  return `${parsed.pathname}${parsed.search}${parsed.hash}`
+}
+
 export const extractTargetBlocks = (
   blockType: string,
   blocks: Block[]

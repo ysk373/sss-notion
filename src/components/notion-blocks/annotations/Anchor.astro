@@ -1,17 +1,23 @@
 ---
 import { RichText } from '../../../lib/interfaces.ts'
+import { rewriteSameOriginHrefForBasePath } from '../../../lib/blog-helpers.ts'
 
 export interface Props {
   richText: RichText
 }
 
 const { richText } = Astro.props
+
+const resolvedHref =
+  richText.Href && !richText.Mention
+    ? rewriteSameOriginHrefForBasePath(richText.Href, Astro.site)
+    : undefined
 ---
 
 {
   /* prettier-ignore */
-  richText.Href && !richText.Mention ? (
-    <a href={richText.Href}><slot /></a>
+  resolvedHref ? (
+    <a href={resolvedHref}><slot /></a>
   ) : (
     <slot />
   )

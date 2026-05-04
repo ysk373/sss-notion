@@ -403,15 +403,19 @@ export async function getBlock(blockId: string): Promise<Block> {
   return _buildBlock(res)
 }
 
-/** 内部用タグ。記事一覧やタグURLには出さない。 */
+/** サイドバー等のナビには出さないが、タグ一覧 URL は生成する（固定ページの Info リンクの 404 防止）。 */
 const TAGS_EXCLUDED_FROM_NAV = new Set(['Info'])
 
-function collectUniqueTagsFromPosts(posts: Post[]): SelectProperty[] {
+function collectUniqueTagsFromPosts(
+  posts: Post[],
+  options?: { excludeNames?: Set<string> }
+): SelectProperty[] {
+  const exclude = options?.excludeNames ?? new Set<string>()
   const tagNames: string[] = []
   return posts
     .flatMap((post) => post.Tags)
     .reduce((acc, tag) => {
-      if (!tagNames.includes(tag.name) && !TAGS_EXCLUDED_FROM_NAV.has(tag.name)) {
+      if (!tagNames.includes(tag.name) && !exclude.has(tag.name)) {
         acc.push(tag)
         tagNames.push(tag.name)
       }
@@ -422,14 +426,16 @@ function collectUniqueTagsFromPosts(posts: Post[]): SelectProperty[] {
     )
 }
 
-/** サイドバー・トップのカテゴリ用。通常記事に付いたタグのみ。 */
+/** サイドバー・トップのカテゴリ用。通常記事に付いたタグのみ（Info は除外）。 */
 export async function getAllTags(): Promise<SelectProperty[]> {
-  return collectUniqueTagsFromPosts(await getContentPosts())
+  return collectUniqueTagsFromPosts(await getContentPosts(), {
+    excludeNames: TAGS_EXCLUDED_FROM_NAV,
+  })
 }
 
 /**
  * タグ一覧ページの getStaticPaths 用。
- * 固定ページなどにだけ付いたタグでも URL を生成し、リンクの 404 を防ぐ。
+ * 固定ページなどにだけ付いたタグでも URL を生成し、リンクの 404 を防ぐ（Info も含む）。
  */
 export async function getAllTagsForStaticPaths(): Promise<SelectProperty[]> {
   return collectUniqueTagsFromPosts(await getAllPosts())
