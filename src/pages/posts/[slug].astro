@@ -48,7 +48,7 @@ if (!post) {
 
 const database = await getDatabase()
 
-const [blocks, allPosts, rankedPosts, recentPosts, tags, postsHavingSameTag] =
+const [blocks, contentPosts, rankedPosts, recentPosts, tags, postsHavingSameTag] =
   await Promise.all([
     getAllBlocksByBlockId(post.PageId),
     getContentPosts(),
@@ -96,9 +96,9 @@ await Promise.all(
     .map((promise) => promise.then(downloadFile))
 )
 
-const currentPostIndex = allPosts.findIndex((post) => post.Slug === slug)
-const prevPost = allPosts[currentPostIndex + 1]
-const nextPost = allPosts[currentPostIndex - 1]
+const currentPostIndex = contentPosts.findIndex((post) => post.Slug === slug)
+const prevPost = contentPosts[currentPostIndex + 1]
+const nextPost = contentPosts[currentPostIndex - 1]
 
 let ogImage = ''
 if (post.FeaturedImage && post.FeaturedImage.Url) {
@@ -176,6 +176,6 @@ const structuredData = {
     />
     <BlogPostsLink heading="おすすめ記事" posts={rankedPosts} />
     <BlogPostsLink heading="最新記事" posts={recentPosts} />
-    <BlogTagsLink heading="カテゴリ" tags={tags} contentPosts={allPosts} />
+    <BlogTagsLink heading="カテゴリ" tags={tags} contentPosts={contentPosts} />
   </div>
 </Layout>

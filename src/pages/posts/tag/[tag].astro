@@ -6,6 +6,7 @@ import {
   getRankedPosts,
   getAllTags,
   getAllTagsForStaticPaths,
+  getAllPosts,
   getContentPosts,
   getTagAppearance,
   getNumberOfPagesByTag,
@@ -32,16 +33,17 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params
 
-const [posts, rankedPosts, tags, numberOfPages, contentPosts] =
+const [posts, rankedPosts, tags, numberOfPages, contentPosts, allPosts] =
   await Promise.all([
     getPostsByTag(tag, NUMBER_OF_POSTS_PER_PAGE),
     getRankedPosts(),
     getAllTags(),
     getNumberOfPagesByTag(tag),
     getContentPosts(),
+    getAllPosts(),
   ])
 
-const currentTag = getTagAppearance(tag, contentPosts)
+const currentTag = getTagAppearance(tag, allPosts)
 ---
 
 <Layout

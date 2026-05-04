@@ -53,6 +53,8 @@ import type {
   Mention,
   Reference,
 } from '../interfaces'
+import { FIXED_PAGE_NAV_SLUGS } from '../constants/fixed-pages'
+import { SITE_AUTHOR } from '../constants/site-author'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import { Client, APIResponseError } from '@notionhq/client'
 
@@ -64,12 +66,11 @@ let postsCache: Post[] | null = null
 let dbCache: Database | null = null
 
 const numberOfRetry = 2
-const FIXED_PAGE_SLUGS = new Set([
-  'about',
-  'contact',
-  'privacy-policy',
-  'disclaimer',
-])
+const FIXED_PAGE_SLUGS = new Set(
+  FIXED_PAGE_NAV_SLUGS.map((slug) =>
+    slug === 'about' ? SITE_AUTHOR.aboutSlug : slug
+  )
+)
 
 export function isFixedPagePost(post: Post): boolean {
   return (
