@@ -5,6 +5,9 @@ import {
   getPostsByTag,
   getRankedPosts,
   getAllTags,
+  getAllTagsForStaticPaths,
+  getAllPosts,
+  getTagAppearance,
   getNumberOfPagesByTag,
 } from '../../../lib/notion/client.ts'
 import Layout from '../../../layouts/Layout.astro'
@@ -22,20 +25,21 @@ import styles from '../../../styles/blog.module.css'
 import '../../../styles/notion-color.css'
 
 export async function getStaticPaths() {
-  const allTags = await getAllTags()
+  const allTags = await getAllTagsForStaticPaths()
   return allTags.map((tag: SelectProperty) => ({ params: { tag: tag.name } }))
 }
 
 const { tag } = Astro.params
 
-const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
+const [posts, rankedPosts, tags, numberOfPages, allPosts] = await Promise.all([
   getPostsByTag(tag, NUMBER_OF_POSTS_PER_PAGE),
   getRankedPosts(),
   getAllTags(),
   getNumberOfPagesByTag(tag),
+  getAllPosts(),
 ])
 
-const currentTag = posts[0].Tags.find((t) => t.name === tag)
+const currentTag = getTagAppearance(tag, allPosts)
 ---
 
 <Layout

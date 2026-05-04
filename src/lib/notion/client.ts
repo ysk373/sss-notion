@@ -403,14 +403,15 @@ export async function getBlock(blockId: string): Promise<Block> {
   return _buildBlock(res)
 }
 
-export async function getAllTags(): Promise<SelectProperty[]> {
-  const contentPosts = await getContentPosts()
+/** 内部用タグ。記事一覧やタグURLには出さない。 */
+const TAGS_EXCLUDED_FROM_NAV = new Set(['Info'])
 
+function collectUniqueTagsFromPosts(posts: Post[]): SelectProperty[] {
   const tagNames: string[] = []
-  return contentPosts
+  return posts
     .flatMap((post) => post.Tags)
     .reduce((acc, tag) => {
-      if (!tagNames.includes(tag.name) && tag.name !== 'Info') {
+      if (!tagNames.includes(tag.name) && !TAGS_EXCLUDED_FROM_NAV.has(tag.name)) {
         acc.push(tag)
         tagNames.push(tag.name)
       }
@@ -419,6 +420,39 @@ export async function getAllTags(): Promise<SelectProperty[]> {
     .sort((a: SelectProperty, b: SelectProperty) =>
       a.name.localeCompare(b.name)
     )
+}
+
+/** サイドバー・トップのカテゴリ用。通常記事に付いたタグのみ。 */
+export async function getAllTags(): Promise<SelectProperty[]> {
+  return collectUniqueTagsFromPosts(await getContentPosts())
+}
+
+/**
+ * タグ一覧ページの getStaticPaths 用。
+ * 固定ページなどにだけ付いたタグでも URL を生成し、リンクの 404 を防ぐ。
+ */
+export async function getAllTagsForStaticPaths(): Promise<SelectProperty[]> {
+  return collectUniqueTagsFromPosts(await getAllPosts())
+}
+
+/**
+ * タグ名に対応する表示用メタ（色など）。記事が0件のタグページでもヘッダを描画するために使う。
+ * `posts` は getAllPosts() の戻り（日付降順）を想定。
+ */
+export function getTagAppearance(
+  tagName: string,
+  posts: Post[]
+): SelectProperty {
+  if (!tagName) {
+    return { id: '', name: '', color: 'default' }
+  }
+  for (const post of posts) {
+    const found = post.Tags.find((t) => t.name === tagName)
+    if (found) {
+      return found
+    }
+  }
+  return { id: '', name: tagName, color: 'default' }
 }
 
 export async function downloadFile(url: URL) {
