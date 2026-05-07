@@ -1,0 +1,22 @@
+---
+import { getPostLink } from '../lib/blog-helpers.ts'
+
+const destination = getPostLink('about')
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex,follow" />
+    <meta http-equiv="refresh" content={`0;url=${destination}`} />
+    <link rel="canonical" href={destination} />
+    <title>運営者情報へ移動します</title>
+  </head>
+  <body>
+    <p>
+      運営者情報ページへ移動しました。
+      <a href={destination}>移動しない場合はこちら</a>
+    </p>
+  </body>
+</html>

@@ -19,6 +19,7 @@ const {
 } = Astro.props
 
 const aboutHref = getNavLink(`/posts/${SITE_AUTHOR.aboutSlug}`)
+const contactHref = getNavLink(`/posts/${SITE_AUTHOR.contactSlug}`)
 ---
 
 <div class="author-profile">
@@ -38,6 +39,9 @@ const aboutHref = getNavLink(`/posts/${SITE_AUTHOR.aboutSlug}`)
     <p class="author-description">{description}</p>
     <p class="author-about-link-wrap">
         <a href={aboutHref} class="author-about-link">運営者情報を見る</a>
+    </p>
+    <p class="author-contact-link-wrap">
+        <a href={contactHref} class="author-contact-link">お問い合わせはこちら</a>
     </p>
 </div>
 
@@ -110,6 +114,17 @@ const aboutHref = getNavLink(`/posts/${SITE_AUTHOR.aboutSlug}`)
     }
 
     .author-about-link {
+        font-weight: 500;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .author-contact-link-wrap {
+        margin: 0.35rem 0 0;
+        font-size: 0.85rem;
+    }
+
+    .author-contact-link {
         font-weight: 500;
         text-decoration: underline;
         text-underline-offset: 2px;

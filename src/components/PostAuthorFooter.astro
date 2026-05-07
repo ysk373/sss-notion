@@ -6,6 +6,7 @@ import { getNavLink } from '../lib/blog-helpers.ts'
 import { SITE_AUTHOR } from '../constants/site-author.ts'
 
 const aboutHref = getNavLink(`/posts/${SITE_AUTHOR.aboutSlug}`)
+const contactHref = getNavLink(`/posts/${SITE_AUTHOR.contactSlug}`)
 ---
 
 <section class="post-author-footer" aria-labelledby="post-author-heading">
@@ -20,6 +21,9 @@ const aboutHref = getNavLink(`/posts/${SITE_AUTHOR.aboutSlug}`)
       <p class="post-author-bio">{SITE_AUTHOR.description}</p>
       <p class="post-author-link-wrap">
         <a href={aboutHref} class="post-author-about-link">運営者情報（プロフィール）</a>
+      </p>
+      <p class="post-author-link-wrap">
+        <a href={contactHref} class="post-author-about-link">お問い合わせ</a>
       </p>
     </div>
   </div>

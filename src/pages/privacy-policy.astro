@@ -1,0 +1,22 @@
+---
+import { getPostLink } from '../lib/blog-helpers.ts'
+
+const destination = getPostLink('privacy-policy')
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex,follow" />
+    <meta http-equiv="refresh" content={`0;url=${destination}`} />
+    <link rel="canonical" href={destination} />
+    <title>プライバシーポリシーページへ移動します</title>
+  </head>
+  <body>
+    <p>
+      プライバシーポリシーページへ移動しました。
+      <a href={destination}>移動しない場合はこちら</a>
+    </p>
+  </body>
+</html>

@@ -210,7 +210,11 @@ if (database.Icon && database.Icon.Type === 'file') {
                 {
                   FIXED_PAGE_NAV_SLUGS.map((slug, index) => (
                     <>
-                      {index > 0 && <span class="separator">|</span>}
+                      {index > 0 && (
+                        <span class="separator" aria-hidden="true">
+                          |
+                        </span>
+                      )}
                       <a
                         href={getNavLink(
                           slug === 'about'
@@ -386,13 +390,12 @@ if (database.Icon && database.Icon.Type === 'file') {
   }
   @media (max-width: 640px) {
     main footer .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 4px 0;
+      display: grid;
+      justify-items: center;
+      gap: 8px 0;
     }
     main footer .separator {
-      margin: 0 6px;
+      display: none;
     }
   }
 </style>
