@@ -42,7 +42,6 @@ const TURTLE_SLUG_ORDER = [
   'turtlebot3-ros2-overview',
   'turtlebot3-ros2-host-pc-setup',
   'turtlebot3-ros2-raspberry-pi-setup',
-  'turtlebot3-ros2-raspberry-pi-setup-variations',
   'turtlebot3-ros2-network-setup',
   'turtlebot3-ros2-setup-04-network-ssh',
 ];
