@@ -1,10 +1,11 @@
 ---
 
 ## name: nano-banana-pro
+
 description: |
-  画像生成スキル。
-  generate-image.js（Gemini API）を使用して高品質な画像を生成する。
-  サムネイル、イラスト、写実的な画像など多様な用途に対応。
+画像生成スキル。
+generate-image.js（Gemini API）を使用して高品質な画像を生成する。
+サムネイル、イラスト、写実的な画像など多様な用途に対応。
 context: fork
 
 # 画像生成スキル（generate-image.js）
@@ -147,13 +148,11 @@ White background, black ink, rough sketch style, no extra lines."
 
 ### 推奨仕様（サムネイル用）
 
-
-| 項目      | 推奨値                 |
-| ------- | ------------------- |
-| サイズ     | 1200x630px (OGP最適化) |
-| フォーマット  | PNG                 |
-| ファイルサイズ | 500KB以下             |
-
+| 項目           | 推奨値                 |
+| -------------- | ---------------------- |
+| サイズ         | 1200x630px (OGP最適化) |
+| フォーマット   | PNG                    |
+| ファイルサイズ | 500KB以下              |
 
 ## R2アップロードとの連携
 
