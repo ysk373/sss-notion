@@ -12,7 +12,7 @@ import { pathJoin } from './utils'
 /** 絶対URL用に論理パスへ揃える（BASE_PATH が付いた文字列でも受けられる） */
 export function stripBasePathForNav(fullPath: string): string {
   const base = BASE_PATH.trim()
-  let p = fullPath.startsWith('/') ? fullPath : `/${fullPath}`
+  const p = fullPath.startsWith('/') ? fullPath : `/${fullPath}`
   if (!base) {
     return p
   }
