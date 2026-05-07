@@ -16,5 +16,5 @@ export const REQUEST_TIMEOUT_MS = parseInt(
 )
 export const ENABLE_LIGHTBOX = import.meta.env.ENABLE_LIGHTBOX
 
-// AdSense申請前は専門性が伝わりやすい技術記事を主軸に表示する
-export const MAIN_CATEGORIES = ['技術', '投資']
+/** トップのカテゴリ見出し。公開記事が0件のタグはセクションごと非表示。 */
+export const MAIN_CATEGORIES = ['技術']
