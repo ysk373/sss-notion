@@ -236,7 +236,7 @@ async function main() {
     hubSlug: 'series-turtlebot3-ros2',
     hubTitle: '【シリーズ目次】TurtleBot3 × ROS2 環境構築',
     excerpt:
-      'TurtleBot3 と ROS2 Humble を使った環境構築記事の読む順です。④は Wi-Fi 版と SSH 版の2本があります。',
+      'TurtleBot3 と ROS2 Humble を使った環境構築記事の読む順です。④が Wi-Fi／マルチマシン、⑤が SSH／固定 IP の分割です。',
     tagNames: ['How-to', '技術'],
     introLines: [
       'このページは「TurtleBot3 × ROS2（Humble）環境構築」関連記事の目次です。',
