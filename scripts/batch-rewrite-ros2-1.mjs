@@ -2,14 +2,14 @@
  * ROS2 入門シリーズ バッチ1 GEO リライト生成
  * tmp/articles-export/{slug}.json → tmp/rewrites/{slug}.json
  */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const ROOT = join(__dirname, '..')
-const EXPORT_DIR = join(ROOT, 'tmp/articles-export')
-const REWRITE_DIR = join(ROOT, 'tmp/rewrites')
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..');
+const EXPORT_DIR = join(ROOT, 'tmp/articles-export');
+const REWRITE_DIR = join(ROOT, 'tmp/rewrites');
 
 const SLUGS = [
   'ros2-introduction',
@@ -21,26 +21,32 @@ const SLUGS = [
   'ros2-visualization-rviz2-rqt',
   'ros2-package-colcon',
   'ros2-tf2-coordinate-transform',
-]
+];
 
-const KEEP_KINDS = new Set(['image', 'divider', 'unsupported', 'code'])
+const KEEP_KINDS = new Set(['image', 'divider', 'unsupported', 'code']);
 
 const DOCS = {
   humble: 'https://docs.ros.org/en/humble/',
-  install: 'https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html',
+  install:
+    'https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html',
   distros: 'https://docs.ros.org/en/humble/Releases.html',
   concepts: 'https://docs.ros.org/en/humble/Concepts/Basic/About-Nodes.html',
-  pubsub: 'https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html',
-  services: 'https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.html',
-  actions: 'https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html',
-  interfaces: 'https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Custom-ROS2-Interfaces.html',
+  pubsub:
+    'https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html',
+  services:
+    'https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.html',
+  actions:
+    'https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html',
+  interfaces:
+    'https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Custom-ROS2-Interfaces.html',
   rviz: 'https://docs.ros.org/en/humble/Tutorials/Intermediate/RViz/RViz-User-Guide/RViz-User-Guide.html',
-  workspace: 'https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html',
+  workspace:
+    'https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html',
   colcon: 'https://colcon.readthedocs.io/en/released/',
   tf2: 'https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Tf2-Main.html',
   qos: 'https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html',
   series: 'https://sssstudy.com/posts/series-ros2-intro/',
-}
+};
 
 /** @type {Record<string, object>} */
 const REWRITE_CONFIG = {
@@ -48,13 +54,15 @@ const REWRITE_CONFIG = {
     excerpt:
       '2026年5月時点。ROS 2 の位置づけ、ROS 1 との設計差、ディストリビューション選び、ノード／トピック等の用語骨格を整理する入門記事。読了後は環境構築へ進める。',
     h2: {
-      'ROS2が生まれた背景': 'なぜ ROS2 が生まれたのか？ROS1 の限界と設計の違い',
-      'ROS2のバージョン（ディストリビューション）': 'ROS2 のディストリビューションとは？Humble の選び方',
-      'ROS2のアーキテクチャ概要': 'ROS2 のアーキテクチャとは？DDS と主要コンポーネント',
-      'ROS2でできること': 'ROS2 で何ができる？産業・研究での活用例',
-      'ROS2学習ロードマップ': 'ROS2 入門の学習手順は？シリーズ①〜⑪の進め方',
+      ROS2が生まれた背景: 'なぜ ROS2 が生まれたのか？ROS1 の限界と設計の違い',
+      'ROS2のバージョン（ディストリビューション）':
+        'ROS2 のディストリビューションとは？Humble の選び方',
+      ROS2のアーキテクチャ概要:
+        'ROS2 のアーキテクチャとは？DDS と主要コンポーネント',
+      ROS2でできること: 'ROS2 で何ができる？産業・研究での活用例',
+      ROS2学習ロードマップ: 'ROS2 入門の学習手順は？シリーズ①〜⑪の進め方',
       まとめ: 'ROS2 入門①のまとめ：押さえるべき要点',
-      '検証環境と失敗しやすい点': '検証環境とつまずきやすい点',
+      検証環境と失敗しやすい点: '検証環境とつまずきやすい点',
     },
     text: {
       '3eaf05a5-25e3-4141-97f6-6b8135e4fe13':
@@ -84,7 +92,9 @@ const REWRITE_CONFIG = {
         DOCS.humble +
         'Concepts/Intermediate/About-Domain-ID.html) の解説も併せて読むと理解が深まります。',
       '54f5c9a9-0f4a-4601-a44f-50e8b8d5118e':
-        'このシリーズでは [ROS 2入門目次](' + DOCS.series + ') の順番で学習を進めます。',
+        'このシリーズでは [ROS 2入門目次](' +
+        DOCS.series +
+        ') の順番で学習を進めます。',
       'b48ebec7-0a19-47ff-b026-cf4ae1bc0d54':
         'この記事は概念整理が中心で、特定ロボット実機での End-to-End 検証はしていません。バージョンや OS で前提が変わるので、作業前に [対応表](' +
         DOCS.distros +
@@ -99,10 +109,11 @@ const REWRITE_CONFIG = {
       前提条件: 'ROS 2 Humble インストールの前提条件とは？',
       インストール手順: 'Ubuntu 22.04 への ROS 2 Humble インストール手順',
       インストール確認: 'ROS 2 のインストール確認方法',
-      'よくあるエラーと対処法': 'インストールでよくあるエラーと対処法',
-      'Dockerでの環境構築（オプション）': 'Docker で ROS 2 環境を構築する方法（オプション）',
+      よくあるエラーと対処法: 'インストールでよくあるエラーと対処法',
+      'Dockerでの環境構築（オプション）':
+        'Docker で ROS 2 環境を構築する方法（オプション）',
       まとめ: 'ROS 2 環境構築のまとめ',
-      '検証環境と失敗しやすい点': '検証環境とつまずきやすい点',
+      検証環境と失敗しやすい点: '検証環境とつまずきやすい点',
     },
     stepH3ToNumbered: true,
     text: {
@@ -127,13 +138,17 @@ const REWRITE_CONFIG = {
     excerpt:
       '2026年5月時点。ROS 2 のノード・トピック・サービス・アクション・パラメータの概要と CLI 確認例。それぞれが向く用途の違いを図つきで整理する入門記事。',
     h2: {
-      'ROS2システムの全体像': 'ROS2 システムの全体像とは？ノードが協調する仕組み',
+      ROS2システムの全体像: 'ROS2 システムの全体像とは？ノードが協調する仕組み',
       '①ノード（Node）': 'ROS2 のノード（Node）とは？最小実行単位の考え方',
       '②トピック（Topic）': 'ROS2 のトピック（Topic）とは？非同期 Pub/Sub 通信',
-      '③サービス（Service）': 'ROS2 のサービス（Service）とは？同期 Req/Resp 通信',
-      '④アクション（Action）': 'ROS2 のアクション（Action）とは？長時間タスク向け通信',
-      '4つの概念の使い分けまとめ': 'ノード・トピック・サービス・アクションの使い分け方',
-      'パラメータ（Parameter）': 'ROS2 のパラメータ（Parameter）とは？ノード設定の切り出し',
+      '③サービス（Service）':
+        'ROS2 のサービス（Service）とは？同期 Req/Resp 通信',
+      '④アクション（Action）':
+        'ROS2 のアクション（Action）とは？長時間タスク向け通信',
+      '4つの概念の使い分けまとめ':
+        'ノード・トピック・サービス・アクションの使い分け方',
+      'パラメータ（Parameter）':
+        'ROS2 のパラメータ（Parameter）とは？ノード設定の切り出し',
       まとめ: 'ROS 2 基本概念のまとめ',
     },
     text: {
@@ -155,14 +170,18 @@ const REWRITE_CONFIG = {
       '2026年5月時点。ament_python の最小パッケージで Publisher と Subscriber を実装する手順。setuptools の console_scripts、colcon ビルドまで Humble 想定で解説。',
     h2: {
       事前準備: 'Publisher/Subscriber 実装の事前準備：ワークスペース作成',
-      'Publisher（送信側）の実装': 'Python で Publisher（送信側）を実装する方法',
-      'Subscriber（受信側）の実装': 'Python で Subscriber（受信側）を実装する方法',
-      'エントリーポイント登録（setup.py と setup.cfg）': 'setup.py でエントリーポイントを登録する方法',
-      'ビルドと実行': 'colcon ビルドと Publisher/Subscriber の実行手順',
-      'トピックの確認コマンド': 'トピック通信を確認する CLI コマンド',
-      'QoS（Quality of Service）について': 'QoS（Quality of Service）とは？入門レベルの設定',
+      'Publisher（送信側）の実装':
+        'Python で Publisher（送信側）を実装する方法',
+      'Subscriber（受信側）の実装':
+        'Python で Subscriber（受信側）を実装する方法',
+      'エントリーポイント登録（setup.py と setup.cfg）':
+        'setup.py でエントリーポイントを登録する方法',
+      ビルドと実行: 'colcon ビルドと Publisher/Subscriber の実行手順',
+      トピックの確認コマンド: 'トピック通信を確認する CLI コマンド',
+      'QoS（Quality of Service）について':
+        'QoS（Quality of Service）とは？入門レベルの設定',
       まとめ: 'トピック通信実装のまとめ',
-      '検証環境と失敗しやすい点': '検証環境とつまずきやすい点',
+      検証環境と失敗しやすい点: '検証環境とつまずきやすい点',
     },
     text: {
       'd9fc456a-58e1-45df-90b7-f7642a65e8f6':
@@ -183,9 +202,11 @@ const REWRITE_CONFIG = {
       '2026年5月時点。example_interfaces と turtlesim を題材に、サービス／アクションの Python 実装と CLI 確認までの手順。API 細部はディストリで差があります（Humble 想定）。',
     h2: {
       'サービス（Service）の実装': 'Python でサービス（Service）を実装する方法',
-      '検証環境と失敗しやすい点': 'サービス実装でつまずきやすい点',
-      'アクション（Action）の実装': 'Python でアクション（Action）を実装する方法',
-      'サービス vs アクションの選び方（要点）': 'サービスとアクションはどう選ぶ？判断基準',
+      検証環境と失敗しやすい点: 'サービス実装でつまずきやすい点',
+      'アクション（Action）の実装':
+        'Python でアクション（Action）を実装する方法',
+      'サービス vs アクションの選び方（要点）':
+        'サービスとアクションはどう選ぶ？判断基準',
       まとめ: 'サービス・アクション実装のまとめ',
     },
     text: {
@@ -202,7 +223,9 @@ const REWRITE_CONFIG = {
       '39540df4-0bd2-4a45-96c3-ff7410f15274':
         '記事の ros2 run my_pkg ... を試すには、次の骨組みが揃っている必要があります（Humble 想定。パッケージ名・エントリ名は環境に合わせて読み替えてください）。',
       '281e9389-490a-42fa-b1da-0e017813083e':
-        '冒頭の図と同じ整理です。詳細は [Actions](' + DOCS.actions + ') の解説も参照してください。',
+        '冒頭の図と同じ整理です。詳細は [Actions](' +
+        DOCS.actions +
+        ') の解説も参照してください。',
     },
   },
 
@@ -210,18 +233,26 @@ const REWRITE_CONFIG = {
     excerpt:
       '2026年5月時点。.msg/.srv/.action を ament_cmake のインターフェース用パッケージにまとめ、rosidl_generate_interfaces で生成する手順。ビルド順と Python import まで解説（Humble 想定）。',
     h2: {
-      'なぜカスタムインターフェースが必要か': 'なぜカスタムインターフェースが必要なのか？',
-      インターフェースの種類: 'ROS2 のインターフェース種類とは？.msg/.srv/.action',
-      専用インターフェースパッケージの作成: 'インターフェース専用パッケージの作成手順',
-      'カスタムメッセージ（.msg）の定義': '.msg ファイルでカスタムメッセージを定義する方法',
-      'カスタムサービス（.srv）の定義': '.srv ファイルでカスタムサービスを定義する方法',
-      'カスタムアクション（.action）の定義': '.action ファイルでカスタムアクションを定義する方法',
-      'CMakeLists.txt と package.xml の設定': 'CMakeLists.txt と package.xml の設定方法',
-      'ビルドと確認': 'インターフェースパッケージのビルドと確認手順',
-      'Pythonノードで使う': 'Python ノードでカスタムインターフェースを使う方法',
+      なぜカスタムインターフェースが必要か:
+        'なぜカスタムインターフェースが必要なのか？',
+      インターフェースの種類:
+        'ROS2 のインターフェース種類とは？.msg/.srv/.action',
+      専用インターフェースパッケージの作成:
+        'インターフェース専用パッケージの作成手順',
+      'カスタムメッセージ（.msg）の定義':
+        '.msg ファイルでカスタムメッセージを定義する方法',
+      'カスタムサービス（.srv）の定義':
+        '.srv ファイルでカスタムサービスを定義する方法',
+      'カスタムアクション（.action）の定義':
+        '.action ファイルでカスタムアクションを定義する方法',
+      'CMakeLists.txt と package.xml の設定':
+        'CMakeLists.txt と package.xml の設定方法',
+      ビルドと確認: 'インターフェースパッケージのビルドと確認手順',
+      Pythonノードで使う: 'Python ノードでカスタムインターフェースを使う方法',
       注意点: 'カスタムインターフェース定義の注意点',
-      '検証環境と失敗しやすい点': '検証環境とつまずきやすい点',
-      '標準インターフェースの確認コマンド': '標準インターフェースを確認する CLI コマンド',
+      検証環境と失敗しやすい点: '検証環境とつまずきやすい点',
+      標準インターフェースの確認コマンド:
+        '標準インターフェースを確認する CLI コマンド',
       まとめ: 'カスタムインターフェース定義のまとめ',
     },
     text: {
@@ -247,10 +278,10 @@ const REWRITE_CONFIG = {
       '2026年5月時点。RViz2 の Add／Fixed Frame、rqt_graph・rqt_plot など可視化ツールの入口。トピックと frame_id の対応を意識するデバッグメモ（Humble 想定）。',
     h2: {
       'RViz2 の概要': 'RViz2 とは？3D 可視化ツールの基本',
-      'RViz2でマーカーを表示する': 'RViz2 でマーカーを表示する方法',
+      RViz2でマーカーを表示する: 'RViz2 でマーカーを表示する方法',
       rqtの概要: 'rqt とは？プラグイン形式のデバッグ GUI',
       '実践: turtlesimでrqt_graphを見る': 'turtlesim で rqt_graph を試す手順',
-      '検証環境と失敗しやすい点': '可視化でつまずきやすい点',
+      検証環境と失敗しやすい点: '可視化でつまずきやすい点',
       まとめ: 'RViz2 と rqt のまとめ',
     },
     text: {
@@ -275,8 +306,9 @@ const REWRITE_CONFIG = {
       Pythonパッケージの作成: 'ament_python パッケージの作成手順',
       'C++パッケージの作成': 'ament_cmake（C++）パッケージの作成手順',
       colconビルド: 'colcon build の使い方と source の手順',
-      launchファイルで複数ノードを同時起動: 'launch ファイルで複数ノードを起動する方法',
-      '検証環境と失敗しやすい点': 'パッケージ開発でつまずきやすい点',
+      launchファイルで複数ノードを同時起動:
+        'launch ファイルで複数ノードを起動する方法',
+      検証環境と失敗しやすい点: 'パッケージ開発でつまずきやすい点',
       役立つ開発テクニック: 'ROS 2 開発で役立つテクニック',
       まとめ: 'パッケージと colcon のまとめ',
     },
@@ -300,7 +332,7 @@ const REWRITE_CONFIG = {
       動的変換の配信: '動的変換（Transform）を配信する方法',
       座標変換の取得: 'lookup_transform で座標変換を取得する方法',
       TFツリーの可視化: 'TF ツリーを可視化・確認する方法',
-      '検証環境と失敗しやすい点': 'TF2 でつまずきやすい点',
+      検証環境と失敗しやすい点: 'TF2 でつまずきやすい点',
       まとめ: 'TF2 座標変換のまとめ',
     },
     text: {
@@ -320,18 +352,18 @@ const REWRITE_CONFIG = {
         ') も参照。',
     },
   },
-}
+};
 
 function applyRewrite(exportData, config) {
-  const blocks = exportData.blocks.map((b) => ({ ...b }))
+  const blocks = exportData.blocks.map((b) => ({ ...b }));
 
   for (let i = 0; i < blocks.length; i++) {
-    const block = blocks[i]
+    const block = blocks[i];
 
-    if (KEEP_KINDS.has(block.kind)) continue
+    if (KEEP_KINDS.has(block.kind)) continue;
 
     if (block.kind === 'heading_2' && config.h2?.[block.text]) {
-      block.text = config.h2[block.text]
+      block.text = config.h2[block.text];
     }
 
     if (
@@ -339,13 +371,13 @@ function applyRewrite(exportData, config) {
       block.kind === 'heading_3' &&
       /^Step \d+:/.test(block.text)
     ) {
-      block.kind = 'numbered_list_item'
-      block.notionType = 'numbered_list_item'
-      block.text = block.text.replace(/^Step \d+:\s*/, '')
+      block.kind = 'numbered_list_item';
+      block.notionType = 'numbered_list_item';
+      block.text = block.text.replace(/^Step \d+:\s*/, '');
     }
 
     if (config.text?.[block.notionId] !== undefined) {
-      block.text = config.text[block.notionId]
+      block.text = config.text[block.notionId];
     }
   }
 
@@ -355,34 +387,34 @@ function applyRewrite(exportData, config) {
     excerpt: config.excerpt,
     preserveImages: exportData.preserveImages,
     blocks,
-  }
+  };
 }
 
 function main() {
-  if (!existsSync(REWRITE_DIR)) mkdirSync(REWRITE_DIR, { recursive: true })
+  if (!existsSync(REWRITE_DIR)) mkdirSync(REWRITE_DIR, { recursive: true });
 
-  let ok = true
+  let ok = true;
   for (const slug of SLUGS) {
-    const exportPath = join(EXPORT_DIR, `${slug}.json`)
-    const exportData = JSON.parse(readFileSync(exportPath, 'utf8'))
-    const config = REWRITE_CONFIG[slug]
-    if (!config) throw new Error(`No config for ${slug}`)
+    const exportPath = join(EXPORT_DIR, `${slug}.json`);
+    const exportData = JSON.parse(readFileSync(exportPath, 'utf8'));
+    const config = REWRITE_CONFIG[slug];
+    if (!config) throw new Error(`No config for ${slug}`);
 
-    const rewrite = applyRewrite(exportData, config)
+    const rewrite = applyRewrite(exportData, config);
 
     if (rewrite.blocks.length !== exportData.blocks.length) {
       console.error(
         `ERROR ${slug}: block count ${rewrite.blocks.length} != ${exportData.blocks.length}`
-      )
-      ok = false
+      );
+      ok = false;
     }
 
-    const outPath = join(REWRITE_DIR, `${slug}.json`)
-    writeFileSync(outPath, JSON.stringify(rewrite, null, 2) + '\n', 'utf8')
-    console.log(`Wrote ${outPath} (${rewrite.blocks.length} blocks)`)
+    const outPath = join(REWRITE_DIR, `${slug}.json`);
+    writeFileSync(outPath, JSON.stringify(rewrite, null, 2) + '\n', 'utf8');
+    console.log(`Wrote ${outPath} (${rewrite.blocks.length} blocks)`);
   }
 
-  if (!ok) process.exit(1)
+  if (!ok) process.exit(1);
 }
 
-main()
+main();

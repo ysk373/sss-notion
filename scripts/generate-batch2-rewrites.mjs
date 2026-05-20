@@ -1,13 +1,13 @@
 /**
  * バッチ2 GEO リライト JSON 生成（tmp/articles-export → tmp/rewrites）
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const exportDir = join(__dirname, '../tmp/articles-export')
-const rewriteDir = join(__dirname, '../tmp/rewrites')
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const exportDir = join(__dirname, '../tmp/articles-export');
+const rewriteDir = join(__dirname, '../tmp/rewrites');
 
 const SLUGS = [
   'ros2-gazebo-simulation',
@@ -18,46 +18,56 @@ const SLUGS = [
   'turtlebot3-ros2-network-setup',
   'turtlebot3-ros2-setup-04-network-ssh',
   'turtlebot3-ros2-bringup-teleop',
-]
+];
 
 const LINKS = {
-  humble: '[ROS 2 Humble 公式ドキュメント](https://docs.ros.org/en/humble/index.html)',
+  humble:
+    '[ROS 2 Humble 公式ドキュメント](https://docs.ros.org/en/humble/index.html)',
   gazebo: '[Gazebo（gz-sim）公式](https://gazebosim.org/docs)',
   rosGz: '[ros_gz ドキュメント](https://github.com/gazebosim/ros_gz)',
   nav2: '[Nav2 公式ドキュメント](https://navigation.ros.org/)',
   tb3: '[TurtleBot3 e-Manual](https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/)',
-  tb3Quick: '[TurtleBot3 Quick Start](https://emanual.robotis.com/docs/en/platform/turtlebot3/quick-start/)',
-  ubuntuNetplan: '[Ubuntu netplan リファレンス](https://netplan.readthedocs.io/en/stable/)',
+  tb3Quick:
+    '[TurtleBot3 Quick Start](https://emanual.robotis.com/docs/en/platform/turtlebot3/quick-start/)',
+  ubuntuNetplan:
+    '[Ubuntu netplan リファレンス](https://netplan.readthedocs.io/en/stable/)',
   rpiImager: '[Raspberry Pi Imager](https://www.raspberrypi.com/software/)',
-  domainId: '[ROS_DOMAIN_ID の説明](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Domain-ID.html)',
-  seriesRos2: '[ROS2入門シリーズ目次](https://sssstudy.com/posts/series-ros2-intro/)',
-  seriesTb3: '[TurtleBot3 ROS2環境構築シリーズ目次](https://sssstudy.com/posts/series-turtlebot3-ros2/)',
-  networkSetup: '[Wi-FiとDDS疎通（④）](https://sssstudy.com/posts/turtlebot3-ros2-network-setup/)',
-  networkSsh: '[netplan・SSH・固定IP（⑤）](https://sssstudy.com/posts/turtlebot3-ros2-setup-04-network-ssh/)',
-}
+  domainId:
+    '[ROS_DOMAIN_ID の説明](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Domain-ID.html)',
+  seriesRos2:
+    '[ROS2入門シリーズ目次](https://sssstudy.com/posts/series-ros2-intro/)',
+  seriesTb3:
+    '[TurtleBot3 ROS2環境構築シリーズ目次](https://sssstudy.com/posts/series-turtlebot3-ros2/)',
+  networkSetup:
+    '[Wi-FiとDDS疎通（④）](https://sssstudy.com/posts/turtlebot3-ros2-network-setup/)',
+  networkSsh:
+    '[netplan・SSH・固定IP（⑤）](https://sssstudy.com/posts/turtlebot3-ros2-setup-04-network-ssh/)',
+};
 
 const H2_MAP = {
   'ros2-gazebo-simulation': {
-    'Gazeboの特徴': 'Gazebo（gz-sim）では何がシミュレーションできる？',
-    'Gazeboのインストール': 'ROS 2 Humble に Gazebo 関連パッケージはどう入れる？',
-    'TurtleBot3でシミュレーションを試す': 'TurtleBot3 の Gazebo シミュはどう起動する？',
+    Gazeboの特徴: 'Gazebo（gz-sim）では何がシミュレーションできる？',
+    Gazeboのインストール: 'ROS 2 Humble に Gazebo 関連パッケージはどう入れる？',
+    TurtleBot3でシミュレーションを試す:
+      'TurtleBot3 の Gazebo シミュはどう起動する？',
     'URDF（ロボットモデル定義）の基礎': 'URDF でロボットモデルはどう定義する？',
-    'ROS2とGazeboの接続構造': 'ROS 2 と Gazebo はどう接続される？',
-    'シミュレーションでデータを確認する': 'シミュ上のセンサーデータはどう確認する？',
-    '検証環境と失敗しやすい点': 'Gazebo 連携でよくある失敗は何か？',
+    ROS2とGazeboの接続構造: 'ROS 2 と Gazebo はどう接続される？',
+    シミュレーションでデータを確認する:
+      'シミュ上のセンサーデータはどう確認する？',
+    検証環境と失敗しやすい点: 'Gazebo 連携でよくある失敗は何か？',
     まとめ: 'Gazebo 入門の要点は？',
   },
   'ros2-nav2-navigation': {
-    'Nav2の全体像': 'Nav2（Navigation 2）の構成はどうなっている？',
-    'SLAMで地図を作る': 'SLAM で地図はどう作る？',
-    'Nav2で自律移動': 'Nav2 で自律移動はどう試す？',
-    'PythonからNav2にゴールを送る': 'Python から Nav2 にゴールはどう送る？',
-    'コストマップの仕組み': 'コストマップとは何か？',
-    '検証環境と失敗しやすい点': 'Nav2 試行でつまずきやすい点は？',
+    Nav2の全体像: 'Nav2（Navigation 2）の構成はどうなっている？',
+    SLAMで地図を作る: 'SLAM で地図はどう作る？',
+    Nav2で自律移動: 'Nav2 で自律移動はどう試す？',
+    PythonからNav2にゴールを送る: 'Python から Nav2 にゴールはどう送る？',
+    コストマップの仕組み: 'コストマップとは何か？',
+    検証環境と失敗しやすい点: 'Nav2 試行でつまずきやすい点は？',
     シリーズまとめ: 'ROS 2 入門シリーズの振り返りは？',
   },
   'turtlebot3-ros2-overview': {
-    'TurtleBot3とは': 'TurtleBot3 とは何か？',
+    TurtleBot3とは: 'TurtleBot3 とは何か？',
     モデル比較: 'Burger / Waffle / Waffle Pi はどう違う？',
     'ハードウェア構成（Burger）': 'Burger のハードウェア構成は？',
     ROS2ソフトウェアアーキテクチャ: 'ホストPCと TurtleBot3 の ROS 2 構成は？',
@@ -66,36 +76,47 @@ const H2_MAP = {
     必要なもの: '実機あり・シミュのみで必要なものは？',
     '用語ミニ辞典（入口）': '最初に押さえる用語は？',
     まとめ: 'TurtleBot3 概要の要点は？',
-    '検証環境と未検証になり得る範囲': 'この記事の検証範囲は？',
+    検証環境と未検証になり得る範囲: 'この記事の検証範囲は？',
   },
   'turtlebot3-ros2-host-pc-setup': {
     前提条件: 'ホストPCの前提条件は？',
-    'Step 1: ROS2 Humbleのインストール': 'Step 1: ホストPCに ROS 2 Humble はどう入れる？',
-    'Step 2: TurtleBot3パッケージのインストール': 'Step 2: TurtleBot3 向けパッケージは何を入れる？',
+    'Step 1: ROS2 Humbleのインストール':
+      'Step 1: ホストPCに ROS 2 Humble はどう入れる？',
+    'Step 2: TurtleBot3パッケージのインストール':
+      'Step 2: TurtleBot3 向けパッケージは何を入れる？',
     'Step 3: 環境変数の設定': 'Step 3: TURTLEBOT3_MODEL と ROS_DOMAIN_ID は？',
-    'Step 4: Gazeboシミュレーションで動作確認': 'Step 4: Gazebo で動作確認するには？',
-    インストール済みパッケージの確認: 'インストール済みパッケージはどう確認する？',
+    'Step 4: Gazeboシミュレーションで動作確認':
+      'Step 4: Gazebo で動作確認するには？',
+    インストール済みパッケージの確認:
+      'インストール済みパッケージはどう確認する？',
     トラブルシューティング: 'ホストPCセットアップで困ったら？',
     まとめ: 'ホストPC構築の要点は？',
     '検証環境と適用範囲（ホストPC）': 'この記事の検証範囲は？',
   },
   'turtlebot3-ros2-raspberry-pi-setup': {
     用意するもの: 'Raspberry Pi 4 セットアップに必要なものは？',
-    'Step 1: Ubuntu Server 22.04のmicroSD書き込み': 'Step 1: microSD へ Ubuntu Server はどう書き込む？',
-    'Step 2: Raspberry Pi 4の初回起動とSSH接続': 'Step 2: 初回起動と SSH 接続は？',
+    'Step 1: Ubuntu Server 22.04のmicroSD書き込み':
+      'Step 1: microSD へ Ubuntu Server はどう書き込む？',
+    'Step 2: Raspberry Pi 4の初回起動とSSH接続':
+      'Step 2: 初回起動と SSH 接続は？',
     'Step 3: Raspberry Pi 4の基本設定': 'Step 3: RPi4 の基本設定は？',
-    'Step 4: ROS2 Humbleのインストール': 'Step 4: RPi4 に ROS 2 Humble はどう入れる？',
+    'Step 4: ROS2 Humbleのインストール':
+      'Step 4: RPi4 に ROS 2 Humble はどう入れる？',
     'Step 5: .bashrcへの環境変数設定': 'Step 5: .bashrc の環境変数は？',
-    'Step 6: OpenCRファームウェアの書き込み': 'Step 6: OpenCR ファームウェアはどう書き込む？',
+    'Step 6: OpenCRファームウェアの書き込み':
+      'Step 6: OpenCR ファームウェアはどう書き込む？',
     トラブルシューティング: 'RPi4 セットアップで困ったら？',
     まとめ: 'RPi4 セットアップの要点は？',
   },
   'turtlebot3-ros2-network-setup': {
     ROS2マルチマシン通信の仕組み: 'ROS 2 のマルチマシン通信の仕組みは？',
-    'Step 1: TurtleBot3（RPi4）のWi-Fi設定': 'Step 1: RPi4 の Wi-Fi はどう設定する？',
+    'Step 1: TurtleBot3（RPi4）のWi-Fi設定':
+      'Step 1: RPi4 の Wi-Fi はどう設定する？',
     'Step 2: ROS_DOMAIN_IDの統一': 'Step 2: ROS_DOMAIN_ID はどう揃える？',
-    'Step 3: ファイアウォールの確認': 'Step 3: ファイアウォールは何を確認する？',
-    'Step 4: 通信確認（talker / listener）': 'Step 4: talker / listener で疎通確認するには？',
+    'Step 3: ファイアウォールの確認':
+      'Step 3: ファイアウォールは何を確認する？',
+    'Step 4: 通信確認（talker / listener）':
+      'Step 4: talker / listener で疎通確認するには？',
     'Step 5: 固定IPアドレスの設定（推奨）': 'Step 5: 固定 IP はどう設定する？',
     'Step 6: SSH接続の便利化': 'Step 6: SSH 接続を楽にするには？',
     トラブルシューティング: 'マルチマシン通信で困ったら？',
@@ -105,8 +126,10 @@ const H2_MAP = {
   'turtlebot3-ros2-setup-04-network-ssh': {
     はじめに: 'この記事で何ができるようになる？',
     ネットワーク構成の全体像: 'HostPC と TurtleBot3 のネットワーク構成は？',
-    'Raspberry PiのWiFi設定': 'Raspberry Pi の Wi-Fi は netplan でどう設定する？',
-    SSHを有効化してホストPCから接続する: 'SSH でホストPCから RPi4 に接続するには？',
+    'Raspberry PiのWiFi設定':
+      'Raspberry Pi の Wi-Fi は netplan でどう設定する？',
+    SSHを有効化してホストPCから接続する:
+      'SSH でホストPCから RPi4 に接続するには？',
     固定IPアドレスの設定: '固定 IP（DHCP 予約）はなぜ必要か？',
     ROS2のネットワーク設定: 'ROS 2 の ROS_DOMAIN_ID はどう揃える？',
     接続確認: 'ping と ros2 topic で疎通はどう確認する？',
@@ -118,14 +141,15 @@ const H2_MAP = {
     起動前チェックリスト: 'bringup 前に何を確認する？',
     'Step 1: TurtleBot3への電源投入': 'Step 1: 電源投入の順序は？',
     'Step 2: TurtleBot3 Bringup': 'Step 2: bringup はどう起動する？',
-    'Step 3: キーボード操縦（teleop_keyboard）': 'Step 3: teleop_keyboard で操縦するには？',
+    'Step 3: キーボード操縦（teleop_keyboard）':
+      'Step 3: teleop_keyboard で操縦するには？',
     'Step 4: RViz2でリアルタイム可視化': 'Step 4: RViz2 で LiDAR はどう見る？',
     'Step 5: 各センサーデータの確認': 'Step 5: センサーデータはどう確認する？',
     よく使うコマンドのまとめ: 'よく使うコマンドは？',
     トラブルシューティング: 'bringup・teleop で困ったら？',
     まとめ: '初回起動・操縦の要点は？',
   },
-}
+};
 
 const EXCERPT_MAP = {
   'ros2-gazebo-simulation':
@@ -144,7 +168,7 @@ const EXCERPT_MAP = {
     '2026年5月時点。netplan で Wi-Fi、SSH、固定 IP、ROS_DOMAIN_ID を設定し HostPC と TB3 を接続。同一 LAN 前提の実務手順です。',
   'turtlebot3-ros2-bringup-teleop':
     '2026年5月時点。TurtleBot3 実機の bringup、teleop_keyboard、RViz2 での LiDAR 可視化まで。電源順序とトラブル対処を含む初回起動ガイドです。',
-}
+};
 
 /** notionId 単位の上書き（ブロック数・順序は export 準拠） */
 const TEXT_OVERRIDE = {
@@ -209,9 +233,9 @@ netplan・SSH・固定 IP の具体は ${LINKS.networkSsh} に寄せています
   'aba167be-7ce7-4b2d-b35f-b8aea4695845': `Windows や macOS でも ${LINKS.rpiImager} が使えます。書き込み後は RPi4 を LAN に載せ、④⑤の記事で SSH と DDS を確認します。`,
   '6ff47e4c-3a44-470e-ae77-ee3eef1b212a': `bringup は ${LINKS.tb3} どおり、ロボット上のハードウェアノード（LiDAR・オドメ・モータドライバ）を起動する操作です。`,
   'f0566371-3d54-44f8-8d9d-30abc529ad0e': `SSH でログインした RPi4 のシェルで launch を実行します。ホストPC 側は RViz2 や teleop を動かす構成が一般的です。`,
-}
+};
 
-const KEEP = new Set(['image', 'divider', 'unsupported', 'code'])
+const KEEP = new Set(['image', 'divider', 'unsupported', 'code']);
 
 function cleanTone(text) {
   return text
@@ -226,94 +250,97 @@ function cleanTone(text) {
     .replace(/しましょうね。/g, 'します。')
     .replace(/　+/g, ' ')
     .replace(/  +/g, ' ')
-    .trim()
+    .trim();
 }
 
 function rewriteHeading2(slug, text) {
-  const m = H2_MAP[slug]
-  return m?.[text] ?? text
+  const m = H2_MAP[slug];
+  return m?.[text] ?? text;
 }
 
 function hostPcStepKind(slug, block) {
-  if (slug !== 'turtlebot3-ros2-host-pc-setup') return block.kind
+  if (slug !== 'turtlebot3-ros2-host-pc-setup') return block.kind;
   if (block.kind === 'heading_3' && /^\d+-\d+\./.test(block.text)) {
-    return 'numbered_list_item'
+    return 'numbered_list_item';
   }
-  return block.kind
+  return block.kind;
 }
 
 function rewriteBlock(slug, block, index, blocks) {
-  const out = { ...block }
-  if (KEEP.has(block.kind)) return out
+  const out = { ...block };
+  if (KEEP.has(block.kind)) return out;
 
   if (block.kind === 'heading_2') {
-    out.text = rewriteHeading2(slug, block.text)
-    return out
+    out.text = rewriteHeading2(slug, block.text);
+    return out;
   }
 
   if (TEXT_OVERRIDE[block.notionId]) {
-    out.text = TEXT_OVERRIDE[block.notionId]
-    return out
+    out.text = TEXT_OVERRIDE[block.notionId];
+    return out;
   }
 
-  let text = cleanTone(block.text || '')
+  let text = cleanTone(block.text || '');
 
   if (block.kind === 'bulleted_list_item' && text.startsWith('✅ ')) {
-    text = text.replace(/^✅\s*/, '')
+    text = text.replace(/^✅\s*/, '');
   }
 
-  if (slug === 'turtlebot3-ros2-setup-04-network-ssh' && block.kind === 'quote') {
+  if (
+    slug === 'turtlebot3-ros2-setup-04-network-ssh' &&
+    block.kind === 'quote'
+  ) {
     if (text === '読み分け（役割分担）') {
       out.text =
         '読み分け: DDS 疎通の詳細は ' +
         LINKS.networkSetup +
-        '。本記事は netplan・SSH・固定 IP・ROS_DOMAIN_ID です。'
-      return out
+        '。本記事は netplan・SSH・固定 IP・ROS_DOMAIN_ID です。';
+      return out;
     }
     if (text.startsWith('- 詳細：')) {
       out.text =
-        'Wi-Fi と talker/listener による疎通確認 → ' + LINKS.networkSetup
-      return out
+        'Wi-Fi と talker/listener による疎通確認 → ' + LINKS.networkSetup;
+      return out;
     }
     if (text.startsWith('- 本記事')) {
       out.text =
-        '本記事: SSH・netplan・固定 IP、ROS_DOMAIN_ID の一致。同一 LAN 前提（WAN 公開やゼロトラストは組織方針に従ってください）。'
-      return out
+        '本記事: SSH・netplan・固定 IP、ROS_DOMAIN_ID の一致。同一 LAN 前提（WAN 公開やゼロトラストは組織方針に従ってください）。';
+      return out;
     }
     if (text.includes('重複を避ける')) {
       out.text =
         'DDS 手順の重複を避けるため、マルチマシン疎通の深掘りは ' +
         LINKS.networkSetup +
-        ' へ寄せています。'
-      return out
+        ' へ寄せています。';
+      return out;
     }
     if (text.includes('検証環境')) {
       out.text =
-        '検証環境: HostPC Ubuntu 22.04 + ROS 2 Humble / TurtleBot3 RPi4 + Ubuntu 22.04 Server + ROS 2 Humble（2026年5月時点）。'
-      return out
+        '検証環境: HostPC Ubuntu 22.04 + ROS 2 Humble / TurtleBot3 RPi4 + Ubuntu 22.04 Server + ROS 2 Humble（2026年5月時点）。';
+      return out;
     }
     if (text.includes('~/.ssh/config')) {
-      out.text = text.replace('💡', '').trim()
-      return out
+      out.text = text.replace('💡', '').trim();
+      return out;
     }
   }
 
   if (block.kind === 'callout' && !text.includes('http')) {
     if (slug.includes('turtlebot3') && text.includes('Ubuntu 22.04')) {
-      text += ` 正本: ${LINKS.tb3}。`
+      text += ` 正本: ${LINKS.tb3}。`;
     }
   }
 
-  out.kind = hostPcStepKind(slug, block)
-  out.text = text
-  return out
+  out.kind = hostPcStepKind(slug, block);
+  out.text = text;
+  return out;
 }
 
 function buildRewrite(exportData) {
-  const slug = exportData.slug
+  const slug = exportData.slug;
   const blocks = exportData.blocks.map((b, i) =>
     rewriteBlock(slug, b, i, exportData.blocks)
-  )
+  );
 
   return {
     pageId: exportData.pageId,
@@ -321,19 +348,19 @@ function buildRewrite(exportData) {
     excerpt: EXCERPT_MAP[slug] ?? exportData.excerpt,
     preserveImages: exportData.preserveImages,
     blocks,
-  }
+  };
 }
 
-mkdirSync(rewriteDir, { recursive: true })
+mkdirSync(rewriteDir, { recursive: true });
 
 for (const slug of SLUGS) {
-  const exportPath = join(exportDir, `${slug}.json`)
-  const data = JSON.parse(readFileSync(exportPath, 'utf8'))
-  const rewrite = buildRewrite(data)
+  const exportPath = join(exportDir, `${slug}.json`);
+  const data = JSON.parse(readFileSync(exportPath, 'utf8'));
+  const rewrite = buildRewrite(data);
   if (rewrite.blocks.length !== data.blocks.length) {
-    throw new Error(`${slug}: block count mismatch`)
+    throw new Error(`${slug}: block count mismatch`);
   }
-  const outPath = join(rewriteDir, `${slug}.json`)
-  writeFileSync(outPath, JSON.stringify(rewrite, null, 2), 'utf8')
-  console.log(`Wrote ${outPath} (${rewrite.blocks.length} blocks)`)
+  const outPath = join(rewriteDir, `${slug}.json`);
+  writeFileSync(outPath, JSON.stringify(rewrite, null, 2), 'utf8');
+  console.log(`Wrote ${outPath} (${rewrite.blocks.length} blocks)`);
 }

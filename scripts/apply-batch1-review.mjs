@@ -2,14 +2,14 @@
  * バッチ1 相互レビュー（シニア営業+エンジニア）結果を rewrites に反映
  * tmp/reviews/batch1-review.json → tmp/rewrites/*.json
  */
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const ROOT = join(__dirname, '..')
-const reviewsPath = join(ROOT, 'tmp/reviews/batch1-review.json')
-const rewritesDir = join(ROOT, 'tmp/rewrites')
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..');
+const reviewsPath = join(ROOT, 'tmp/reviews/batch1-review.json');
+const rewritesDir = join(ROOT, 'tmp/rewrites');
 
 const review = {
   batch: 1,
@@ -214,37 +214,37 @@ const review = {
       ],
     },
   ],
-}
+};
 
 function mergeReview(slug, item) {
-  const rewritePath = join(rewritesDir, `${slug}.json`)
+  const rewritePath = join(rewritesDir, `${slug}.json`);
   if (!existsSync(rewritePath)) {
-    console.warn(`Skip: no rewrite for ${slug}`)
-    return
+    console.warn(`Skip: no rewrite for ${slug}`);
+    return;
   }
-  const rewrite = JSON.parse(readFileSync(rewritePath, 'utf8'))
-  if (item.excerpt) rewrite.excerpt = item.excerpt
+  const rewrite = JSON.parse(readFileSync(rewritePath, 'utf8'));
+  if (item.excerpt) rewrite.excerpt = item.excerpt;
   if (item.blockUpdates?.length) {
-    const map = new Map(item.blockUpdates.map((u) => [u.notionId, u]))
+    const map = new Map(item.blockUpdates.map((u) => [u.notionId, u]));
     rewrite.blocks = rewrite.blocks.map((b) => {
-      const u = map.get(b.notionId)
-      if (!u) return b
-      return { ...b, ...u }
-    })
-    rewrite.blockUpdates = item.blockUpdates
+      const u = map.get(b.notionId);
+      if (!u) return b;
+      return { ...b, ...u };
+    });
+    rewrite.blockUpdates = item.blockUpdates;
   }
-  writeFileSync(rewritePath, JSON.stringify(rewrite, null, 2) + '\n', 'utf8')
-  console.log(`Merged ${slug}: ${item.blockUpdates?.length ?? 0} blocks`)
+  writeFileSync(rewritePath, JSON.stringify(rewrite, null, 2) + '\n', 'utf8');
+  console.log(`Merged ${slug}: ${item.blockUpdates?.length ?? 0} blocks`);
 }
 
 function main() {
-  const reviewsDir = join(ROOT, 'tmp/reviews')
-  if (!existsSync(reviewsDir)) mkdirSync(reviewsDir, { recursive: true })
-  writeFileSync(reviewsPath, JSON.stringify(review, null, 2) + '\n', 'utf8')
-  console.log(`Wrote ${reviewsPath}`)
+  const reviewsDir = join(ROOT, 'tmp/reviews');
+  if (!existsSync(reviewsDir)) mkdirSync(reviewsDir, { recursive: true });
+  writeFileSync(reviewsPath, JSON.stringify(review, null, 2) + '\n', 'utf8');
+  console.log(`Wrote ${reviewsPath}`);
   for (const item of review.articles) {
-    mergeReview(item.slug, item)
+    mergeReview(item.slug, item);
   }
 }
 
-main()
+main();
