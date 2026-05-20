@@ -12,6 +12,8 @@ export interface Post {
   Cover: FileObject | null
   Slug: string
   Date: string
+  /** Notion の LastUpdated。未設定時は空文字（表示・JSON-LD は Date にフォールバック） */
+  LastUpdated: string
   Tags: SelectProperty[]
   Excerpt: string
   FeaturedImage: FileObject | null

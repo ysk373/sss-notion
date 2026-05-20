@@ -1068,6 +1068,7 @@ function _buildPost(pageObject: responses.PageObject): Post {
       ? prop.Slug.rich_text.map((richText) => richText.plain_text).join('')
       : '',
     Date: prop.Date.date ? prop.Date.date.start : '',
+    LastUpdated: prop.LastUpdated?.date?.start ?? '',
     Tags: prop.Tags.multi_select ? prop.Tags.multi_select : [],
     Excerpt:
       prop.Excerpt.rich_text && prop.Excerpt.rich_text.length > 0

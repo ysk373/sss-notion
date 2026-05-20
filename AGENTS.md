@@ -50,6 +50,7 @@ SSS Blog の Notion データベース ID:
 - `Published`: 公開フラグ
 - `Slug`: `/posts/<slug>/` の URL 末尾
 - `Date`: 公開日
+- `LastUpdated`: 最終更新日（改訂時に更新。JSON-LD の `dateModified` に使用）
 - `Tags`: タグ
 - `Excerpt`: 記事要約
 - `Rank`: おすすめ表示の順位
@@ -118,6 +119,13 @@ SSS Blog の Notion データベース ID:
 - CSS はスコープドスタイルと既存 CSS 変数を使う。
 - 追加するコードは小さく、読みやすく、責務を分けすぎない。
 - 複雑な処理にだけ短いコメントを書く。
+
+## GEO / AI 引用
+
+- 記事の適合監査・リライト優先度: `npm run geo:audit` → `tmp/geo-audit.json`
+- 記事リライト作業: `.cursor/skills/geo-rewrite/SKILL.md` を参照
+- Notion `LastUpdated` 初期化（初回のみ）: `npm run geo:setup-last-updated`
+- `llms.txt` 再生成: `npm run geo:llms`
 
 ## 検証
 

@@ -63,7 +63,8 @@ async function main() {
       const title = p.Page?.title?.[0]?.plain_text ?? '';
       const tags = (p.Tags?.multi_select || []).map((t) => t.name);
       const date = p.Date?.date?.start ?? '';
-      return { pageId: page.id, title, slug, tags, date };
+      const lastUpdated = p.LastUpdated?.date?.start ?? '';
+      return { pageId: page.id, title, slug, tags, date, lastUpdated };
     })
     .filter((r) => r.slug && r.title)
     .filter((r) => !FIXED_SLUGS.has(r.slug) && !isInfoTag(r.tags));

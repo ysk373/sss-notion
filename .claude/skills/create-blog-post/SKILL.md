@@ -44,6 +44,10 @@ Notion MCPを使用して、AIが直接Notionに記事を作成します。
 - **本文**: 体験談を交えた解説。専門用語は噛み砕く。
 - **まとめ**: メリットの再確認(リスト) + 読者への推奨メッセージ
 
+### GEO（新規記事）
+
+作成後に `npm run geo:audit -- --slug {スラッグ}` を実行し、issue があれば同じ場で修正する。リライト方針は `.cursor/skills/geo-rewrite/SKILL.md`。
+
 ### 画像・図解の作成ルール（重要）
 
 - ユーザーが画像、図解、サムネイルを希望したら、必ず先に `nano-banana-pro` スキルを参照する。
@@ -76,6 +80,7 @@ MCPツール `API-patch-page` を使用：
   "properties": {
     "Slug": { "rich_text": [{ "text": { "content": "{スラッグ}" } }] },
     "Date": { "date": { "start": "{YYYY-MM-DD}" } },
+    "LastUpdated": { "date": { "start": "{YYYY-MM-DD}" } },
     "Tags": { "multi_select": [{ "name": "{タグ}" }] },
     "Excerpt": { "rich_text": [{ "text": { "content": "{要約}" } }] },
     "Published": { "checkbox": true }

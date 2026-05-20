@@ -16,7 +16,13 @@
     "cache:purge": "nx reset && rm -f tmp/*",
     "_fetch-notion-blocks": "node scripts/retrieve-block-children.cjs",
     "r2:upload": "node scripts/r2-upload.cjs",
-    "r2:delete": "node scripts/r2-delete.cjs"
+    "r2:delete": "node scripts/r2-delete.cjs",
+    "geo:setup-last-updated": "node scripts/setup-last-updated.mjs",
+    "geo:audit": "node scripts/geo-audit.mjs",
+    "geo:llms": "node scripts/generate-llms-txt.mjs",
+    "geo:export-articles": "node scripts/notion-article-io.mjs export-all",
+    "geo:apply-rewrite": "node scripts/notion-article-io.mjs apply",
+    "geo:apply-all": "node scripts/notion-article-io.mjs apply-all"
   },
   "dependencies": {
     "@astrojs/react": "^4.1.2",

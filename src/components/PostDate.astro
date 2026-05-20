@@ -1,6 +1,7 @@
 ---
 import type { Post } from '../lib/interfaces.ts'
 import { getDateStr } from '../lib/blog-helpers.ts'
+import { getModifiedDate } from '../lib/structured-data.ts'
 
 export interface Props {
   post: Post
@@ -8,15 +9,29 @@ export interface Props {
 }
 
 const { post } = Astro.props
+const published = post.Date ? getDateStr(post.Date) : ''
+const modifiedRaw = getModifiedDate(post)
+const showUpdated =
+  modifiedRaw &&
+  post.Date &&
+  modifiedRaw.slice(0, 10) > post.Date.slice(0, 10)
+const updated = showUpdated ? getDateStr(modifiedRaw) : ''
 ---
 
 <div class="post-date">
-  {post.Date ? getDateStr(post.Date) : ''}
+  {published && <span class="post-date-published">{published}</span>}
+  {updated && (
+    <span class="post-date-updated">（更新: {updated}）</span>
+  )}
 </div>
 
 <style>
   .post-date {
     padding: 0 0 0.3rem;
     font-size: 0.9rem;
+  }
+  .post-date-updated {
+    margin-left: 0.35rem;
+    color: var(--text-muted, #666);
   }
 </style>

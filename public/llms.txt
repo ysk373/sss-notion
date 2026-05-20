@@ -1,0 +1,73 @@
+# 30代エンジニアの備忘録 (SSS Study)
+
+> https://sssstudy.com/
+
+組み込み・ROS2・信号処理・投資メモの個人技術ブログ。記事本文は Notion が正本。
+
+## 固定ページ
+
+- [運営者情報](https://sssstudy.com/posts/about/)
+- [お問い合わせ](https://sssstudy.com/posts/contact/)
+- [プライバシーポリシー](https://sssstudy.com/posts/privacy-policy/)
+- [免責事項](https://sssstudy.com/posts/disclaimer/)
+
+## シリーズ目次
+
+- [TurtleBot3 × ROS2 環境構築](https://sssstudy.com/posts/series-turtlebot3-ros2/)
+- [ROS2 入門](https://sssstudy.com/posts/series-ros2-intro/)
+- [投資・新NISA 学習ロードマップ](https://sssstudy.com/posts/series-investing-nisa/)
+- [コンパイル・リンク・ビルド](https://sssstudy.com/posts/series-build-link/)
+- [Astro × Notion ブログ構築](https://sssstudy.com/posts/series-astro-notion/)
+- [信号処理](https://sssstudy.com/posts/series-signal-processing/)
+- [Web デザイン・UI](https://sssstudy.com/posts/series-web-design/)
+
+## タグ
+
+- How-to
+- Python
+- Web
+- etc
+- プログラミング
+- 信号処理
+- 技術
+- 組み込み
+
+## 公開記事（新しい順）
+
+- [【TurtleBot3 ROS2環境構築⑦】SLAMで地図作成 - slam_toolboxとRViz2で部屋の地図を作る](https://sssstudy.com/posts/turtlebot3-ros2-slam-toolbox-mapping/): （2026年5月時点）TurtleBot3実機で slam_toolbox を起動し、RViz2 と teleop で部屋の地図を作成する手順。地図保存・品質確認・トラブル対処まで、Nav2 前の SLAM を一通り押さえられます。
+- [【TurtleBot3 ROS2環境構築⑥】TurtleBot3初回起動とキーボード操縦 - bringupからteleop_keyboardまで](https://sssstudy.com/posts/turtlebot3-ros2-bringup-teleop/): 2026年5月時点。TurtleBot3 実機の bringup、teleop_keyboard、RViz2 での LiDAR 可視化まで。電源順序とトラブル対処を含む初回起動ガイドです。
+- [【TurtleBot3 ROS2環境構築⑤】ネットワーク設定とSSH接続 - HostPCとTurtleBot3を繋ぐ](https://sssstudy.com/posts/turtlebot3-ros2-setup-04-network-ssh/): 2026年5月時点。netplan で Wi-Fi、SSH、固定 IP、ROS_DOMAIN_ID を設定し HostPC と TB3 を接続。同一 LAN 前提の実務手順です。
+- [【TurtleBot3 ROS2環境構築④】Wi-Fi設定とROS2マルチマシン通信 - ホストPCとTurtleBot3を繋ぐ](https://sssstudy.com/posts/turtlebot3-ros2-network-setup/): 2026年5月時点。RPi4 の Wi-Fi と ROS_DOMAIN_ID を揃え、talker/listener で DDS 疎通を確認。netplan・固定IPの詳細は⑤の記事へ誘導します。
+- [【TurtleBot3 ROS2環境構築③】Raspberry Pi 4セットアップ完全ガイド - microSD書き込みからROS2インストールまで](https://sssstudy.com/posts/turtlebot3-ros2-raspberry-pi-setup/): 2026年5月時点。TurtleBot3 Burger の RPi4 へ Ubuntu Server 22.04・ROS 2 Humble・OpenCR ファームまで。Imager と e-Manual へのリンク付き手順です。
+- [【TurtleBot3 ROS2環境構築②】ホストPC環境構築 - ROS2 HumbleとTurtleBot3パッケージのセットアップ](https://sssstudy.com/posts/turtlebot3-ros2-host-pc-setup/): 2026年5月時点。Ubuntu 22.04 ホストPCへ ROS 2 Humble と TurtleBot3 パッケージを入れ、環境変数と Gazebo 確認まで。e-Manual と重なる手順は要約します。
+- [【TurtleBot3 ROS2環境構築①】TurtleBot3とは - ハードウェア構成とROS2対応モデル](https://sssstudy.com/posts/turtlebot3-ros2-overview/): 2026年5月時点。TurtleBot3 のモデル・ハード構成・ROS 2 マルチマシン構成の入口。e-Manual と Humble 公式へのリンクで確認手順を揃えます。
+- [【ROS2入門⑪】Nav2入門 - 自律ナビゲーションスタックでロボットを自律移動させる](https://sssstudy.com/posts/ros2-nav2-navigation/): 2026年5月時点。Nav2 の構成と、TurtleBot3 シミュでの SLAM→地図保存→自律移動の流れを、公式ドキュメントへのリンク付きで整理します。
+- [【ROS2入門⑩】Gazeboシミュレーター入門 - 仮想空間でロボットを動かす](https://sssstudy.com/posts/ros2-gazebo-simulation/): 2026年5月時点。ROS 2 Humble で Gazebo（ros_gz）と TurtleBot3 シミュを起動し、URDF とトピック確認までを整理した入門メモです。
+- [【ROS2入門⑨】TF2座標変換フレームワーク - ロボットの空間関係を理解する](https://sssstudy.com/posts/ros2-tf2-coordinate-transform/): 2026年5月時点。TF2 のフレームツリー、静的／動的ブロードキャスト、tf2_echo と view_frames まで。Python で座標変換を取得する雛形（Humble 想定）。
+- [【ROS2入門⑧】RViz2とrqt - ロボットの状態を見える化する可視化ツール](https://sssstudy.com/posts/ros2-visualization-rviz2-rqt/): 2026年5月時点。RViz2 の Add／Fixed Frame、rqt_graph・rqt_plot など可視化ツールの入口。トピックと frame_id の対応を意識するデバッグメモ（Humble 想定）。
+- [【ROS2入門⑦】パッケージ作成とcolconビルドシステム入門](https://sssstudy.com/posts/ros2-package-colcon/): 2026年5月時点。ワークスペース構成、ament_python/ament_cmake パッケージのひな型、colcon build と source、launch で複数ノード起動までの手順（Humble 想定）。
+- [【ROS2入門⑥】サービスとアクション - 同期・非同期双方向通信をPythonで実装](https://sssstudy.com/posts/ros2-service-action/): 2026年5月時点。example_interfaces と turtlesim を題材に、サービス／アクションの Python 実装と CLI 確認までの手順。API 細部はディストリで差があります（Humble 想定）。
+- [【ROS2入門⑤】カスタムインターフェース定義 - 独自の.msg/.srv/.actionファイルをつくる](https://sssstudy.com/posts/ros2-custom-interfaces/): 2026年5月時点。.msg/.srv/.action を ament_cmake のインターフェース用パッケージにまとめ、rosidl_generate_interfaces で生成する手順。ビルド順と Python import まで解説（Humble 想定）。
+- [【ROS2入門④】トピック通信実装 - Pythonでパブリッシャーとサブスクライバーをつくる](https://sssstudy.com/posts/ros2-publisher-subscriber/): 2026年5月時点。ament_python の最小パッケージで Publisher と Subscriber を実装する手順。setuptools の console_scripts、colcon ビルドまで Humble 想定で解説。
+- [【ROS2入門③】基本概念を理解する - ノード・トピック・サービス・アクション](https://sssstudy.com/posts/ros2-core-concepts/): 2026年5月時点。ROS 2 のノード・トピック・サービス・アクション・パラメータの概要と CLI 確認例。それぞれが向く用途の違いを図つきで整理する入門記事。
+- [【ROS2入門②】環境構築 - Ubuntu 22.04 + ROS 2 Humble（セットアップ補強メモ）](https://sssstudy.com/posts/ros2-installation/): 2026年5月時点。Ubuntu 22.04（Jammy）へ ROS 2 Humble を入れる手順。公式インストールとの差分（rosdep/apt）と確認コマンド、よくあるエラーへの対処をまとめた実務メモ。
+- [【ROS2入門①】ROS2とは？ロボット開発フレームワークの全体像](https://sssstudy.com/posts/ros2-introduction/): 2026年5月時点。ROS 2 の位置づけ、ROS 1 との設計差、ディストリビューション選び、ノード／トピック等の用語骨格を整理する入門記事。読了後は環境構築へ進める。
+- [メモリマップ入門｜組み込みエンジニアが知るべきメモリ配置とリンカスクリプト](https://sssstudy.com/posts/memory-map-explained/): （2026年5月時点）Flash / RAM への .text〜.bss 配置、リンカスクリプト・スタートアップ・.map の役割を整理。Cortex-M 系を例に BSP の .ld を読むためのガイドです。
+- [Makefile入門｜ビルド自動化の基本構文からパターンルールまで実践解説](https://sssstudy.com/posts/makefile-basics/): （2026年5月時点）Makefile の基本構文、変数・パターンルール・.PHONY から小さな C プロジェクト用テンプレまで。GNU Make による差分ビルドの足がかりとして読めます。
+- [静的リンクと動的リンクの違い｜組み込みエンジニアのためのライブラリ選択ガイド](https://sssstudy.com/posts/static-vs-dynamic-linking/): （2026年5月時点）静的リンクと動的リンクの違いを、配布・更新・メモリ共有・組み込み Linux の前提差から整理。ライブラリ選択の判断材料として読めます。
+- [オブジェクトファイル解説｜.oファイルの内部構造とセクション・シンボルテーブルの仕組み](https://sssstudy.com/posts/object-file-explained/): （2026年5月時点）.o ファイルのセクション・シンボル・再配置情報を整理。nm / objdump / readelf でリンク段の切り分けに使える見取り図として読めます。
+- [コンパイラとリンカの仕組み｜ソースコードが実行ファイルになるまでの4ステップ](https://sssstudy.com/posts/compiler-and-linker-basics/): （2026年5月時点）C/C++ ソースが実行ファイルになるまでの4段階（プリプロセス→コンパイル→アセンブル→リンク）を、gcc の中間成果物確認例つきで整理します。
+- [Cloudflare R2でブログ画像を管理する｜Notionブログの画像消滅問題を解決する方法](https://sssstudy.com/posts/cloudflare-r2-blog-system/): 2026年5月時点、Notion 期限付き画像 URL を避け [Cloudflare R2](https://developers.cloudflare.com/r2/) で安定配信する構成と、バケット・ドメイン・アップロード運用の整理。
+- [デジタルフィルタ設計入門｜FIR と IIR の違いと実装の足がかり](https://sssstudy.com/posts/digital-filter-design/): （2026年5月時点）FIR と IIR の違い、SciPy による設計・適用例、lfilter と filtfilt の使い分けまで。デジタルフィルタ入門の要点を押さえられます。
+- [FFT（高速フーリエ変換）入門｜基礎理論からPython実装まで](https://sssstudy.com/posts/fft-basics-implementation/): （2026年5月時点）DFT と FFT の計算量の違い、窓関数の必要性、NumPy による振幅スペクトル表示まで。FFT 入門の実装要点を押さえられます。
+- [STM32マイコン入門｜GPIO制御・タイマー・割り込みの基礎をHALライブラリで学ぶ](https://sssstudy.com/posts/stm32-gpio-timer-guide/): 2026年5月時点、HAL で GPIO・タイマー・割込の読みどころを整理。シリーズ差は大きいので CubeMX とデータシートを正として確認するための入門ガイド。
+- [ICA・IVAによる音源分離入門｜カクテルパーティー問題を解く信号処理技術](https://sssstudy.com/posts/ica-iva-noise-separation/): （2026年5月時点）ICA と周波数ビン ICA のパーミュテーション問題、IVA が追加する制約を整理。音源分離入門として前提条件と実装のつまずきが分かります。
+- [Webデザインと色彩心理学｜UX向上のための色選び基礎と実践](https://sssstudy.com/posts/color-psychology/): 2026年5月時点、Web の色選びを色彩心理学のヒントと実装チェック（コントラスト・色覚多様性）で整理する実践ガイド。
+- [ミニマルデザインの5原則｜シンプルで効果的なUI/UX設計の実践ガイド](https://sssstudy.com/posts/minimal-design/): 2026年5月時点、ミニマルデザイン5原則（余白・タイポ・色・a11y・レスポンシブ）を CSS 例つきで整理する UI/UX 実践ガイド。
+- [Webタイポグラフィ実践ガイド｜読みやすさとUXを向上させるCSS設計7つのポイント](https://sssstudy.com/posts/typography-tips/): 2026年5月時点、読みやすい Web タイポを CSS で組む実務7点（フォント・階層・行間・コントラスト・Fluid 等）の整理。
+- [Notion APIを活用した技術ブログ構築：astro-notion-blogの導入メリット](https://sssstudy.com/posts/astro-notion-blog-introduction/): 2026年5月時点、Notion CMS と Astro SSG で技術ブログを組む astro-notion-blog の全体像と導入メリット（公式リンク付き）。
+- [astro-notion-blogの始め方：環境構築から初期デプロイまでの手順](https://sssstudy.com/posts/how-to-start-astro-notion-blog-setup/): 2026年5月時点、astro-notion-blog の環境構築から初回デプロイまで。Notion DB 仕様と公式マニュアルへの導線付き。
+
+## フィード
+
+- RSS: https://sssstudy.com/feed

@@ -32,6 +32,10 @@ import PostAuthorFooter from '../../components/PostAuthorFooter.astro'
 import SeriesHubNotice from '../../components/SeriesHubNotice.astro'
 import InvestmentDisclaimer from '../../components/InvestmentDisclaimer.astro'
 import { resolveSeriesHub, isInvestmentPost } from '../../constants/series-hubs.ts'
+import {
+  buildBlogPostingSchema,
+  buildBreadcrumbList,
+} from '../../lib/structured-data.ts'
 import styles from '../../styles/blog.module.css'
 
 export async function getStaticPaths() {
@@ -113,29 +117,30 @@ const authorUrl = new URL(
 const seriesHub = resolveSeriesHub(post)
 const showInvestmentDisclaimer = isInvestmentPost(post)
 
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
-  headline: post.Title,
+const postUrl = new URL(getPostLink(post.Slug), Astro.site).toString()
+const siteOrigin = Astro.site?.toString() ?? ''
+
+const blogPosting = buildBlogPostingSchema({
+  post,
+  siteOrigin,
+  postUrl,
   description: post.Excerpt,
-  datePublished: post.Date,
-  dateModified: post.Date,
-  author: {
-    '@type': 'Person',
-    name: SITE_AUTHOR.name,
-    url: authorUrl,
-    jobTitle: SITE_AUTHOR.jobTitle,
-    description: SITE_AUTHOR.description,
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: database.Title,
-    url: new URL(getNavLink('/'), Astro.site).toString(),
-  },
-  image: ogImage || undefined,
-  url: new URL(getPostLink(post.Slug), Astro.site).toString(),
-  inLanguage: 'ja',
-}
+  ogImage: ogImage || undefined,
+  databaseTitle: database.Title,
+  authorUrl,
+  seriesHub,
+  getPostPath: getNavLink,
+})
+
+const breadcrumb = buildBreadcrumbList({
+  siteOrigin,
+  postTitle: post.Title,
+  postUrl,
+  seriesHub,
+  getPostPath: getNavLink,
+})
+
+const structuredData = [blogPosting, breadcrumb]
 ---
 
 <Layout
